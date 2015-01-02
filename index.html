@@ -15,7 +15,22 @@
     <link rel="stylesheet" href="stylesheets/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <script language="JavaScript">
+    <!--
+    function mmquote(e) {
+      var r_text = new Array ();
+      r_text[0] = "All the leaves are brown";
+      r_text[1] = "And the sky is grey";
+      r_text[2] = "I've been for a walk";
+      r_text[3] = "On a winter's day";
+      r_text[4] = "I'd be safe and warm";
+      r_text[5] = "If I was in L.A.";
+      r_text[6] = "California dreaming, On such a winter's day";
+      var i = Math.floor(7*Math.random());
+      m.innerHTML = r_text[i];
+    }
+    //-->
+    </script>
   </head>
   <body>
       <div id="header">
@@ -32,7 +47,7 @@
       <section>
         <div id="title">
           <h1>Pantera&#39;s Box</h1>
-          <p>why am I wearing the watermelon on my feet?</p>
+          <p onLoad="javascript:mmquote(this)">why am I wearing the watermelon on my feet?</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/bobalu113">bobalu113</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
