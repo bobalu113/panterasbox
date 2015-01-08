@@ -1,42 +1,59 @@
----
-layout: default
-published: true
-section: blog
----
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<!DOCTYPE html>
+<html>
 
-{% for item in site.categories.blog limit:20 %}
-  <article>
-  {% capture date %}{{ item.date | date: '%B %Y' }}{% endcapture %}
-  {% capture ndate %}{{ item.next.date | date: '%B %Y' }}{% endcapture %}
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Pantera&#39;s Box : why am I wearing the watermelon on my feet?">
 
-  <!--
-    {% if date != ndate %}
-      <h4 class="month">{{item.date | date: '%B %Y'}}</h4>
-    {% endif %}
-  -->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <h3>
-      <a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}">{{item.title}}</a>
-      <span class="post-info">
-        <time datetime="%Y-%M-%d">{{item.date | date:"%B %d, %Y"}}</time>
-        <span class="g-plusone-cont" style="border: 10px"><span class="g-plusone" data-size="small" data-annotation="bubble" data-href="{{site.baseurl}}{{item.url}}" ></span></span>
-      </span>
-    </h3>
+    <title>Pantera&#39;s Box</title>
+  </head>
 
-    {{item.content}}
-<!--
-    <div class="g-comments"
-        data-href="http://localhost:4000{{site.baseurl}}{{item.url}}"
-        data-width="642"
-        data-first_party_property="BLOGGER"
-        data-view_type="FILTERED_POSTMOD">
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/bobalu113/panterasbox">View on GitHub</a>
+
+          <h1 id="project_title">Pantera&#39;s Box</h1>
+          <h2 id="project_tagline">why am I wearing the watermelon on my feet?</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/bobalu113/panterasbox/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bobalu113/panterasbox/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
     </div>
--->
-  </article>
-{% endfor %}
 
-<!-- XXX paramaterize author? -->
-<small>Maintained by <a href="https://plus.google.com/+BobbySchaetzle?rel=author">Bobby Schaetzle</a></small>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><img src="images/stinkbutt.jpg" alt="stinkbutt"></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Pantera&#39;s Box maintained by <a href="https://github.com/bobalu113">bobalu113</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-52997546-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
