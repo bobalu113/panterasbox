@@ -6,7 +6,7 @@ layout: blog
 
 Spent my Friday night sinking about 5 hours into that civ game I wrote about. I'm just into the Medieval era and gearing up for my first war. I did end up going with China and I just researched Machinery which gives me their UU, a crossbowman replacement that can attack twice a turn. I already have a bunch of composite bowmen trained, I just need to save up the money to upgrade em, and then build a few siege units. I've got a few melee units runnin around right now too but I should probably build more. I'm hoping I don't have to use them much.
 
-The more interesting part is deciding who I'm gonna attack. Like I said before, this is really my first time playing an aggressive civ like this in Civ 5. I'm on a pretty big continent with 5/8 civs on it; right now I have the most land area and 3 pretty good looking cities. I'm definitely playing tall, not wide.
+The more interesting part is deciding who I'm gonna attack. Like I said before, this is really my first time playing an aggressive civ like this in Civ 5. I'm on a pretty big continent with 5/8 civs on it, and have 3 pretty respectable cities. Even though I happen to have the most land area right now, I'm definitely playing tall, not wide.
 
 The most threatening civ right now is Portugal but they're on the other side of the map so I'll have to deal with them later. My nearest neighbors are Carthage and England so it'll probably be one of them. Deciding between the two is actually kind of hard, which is a testament to how rich the game has become. England doesn't have much of an army, and if I take them first then I'll have Carthage trapped between me and the coast. 
 
