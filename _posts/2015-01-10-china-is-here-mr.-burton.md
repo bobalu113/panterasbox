@@ -1,6 +1,6 @@
 ---
 published: true
-section: blog
+category: blog
 layout: blog
 ---
 
