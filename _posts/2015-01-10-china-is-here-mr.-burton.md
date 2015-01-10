@@ -1,3 +1,9 @@
+---
+published: true
+section: blog
+layout: blog
+---
+
 Spent my Friday night sinking about 5 hours into that new civ game I wrote about. I'm just into the Medieval era and about to gearing up for my first war. I did end up going with China and I just researched Machinery which gives me their UU, a crossbowman replacement that can attack twice a turn. I already have a bunch of composite bowmen trained, I just need to save up the money to upgrade em, and then build a few siege units. I've got a few melee units runnin around right now too but I should probably build more. I'm hoping I don't have to use them much.
 
 The more interesting part is deciding who I'm gonna attack. Like I said before, this is really my first time playing an aggressive civ like this in Civ 5. I'm on a pretty big continent with 5/8 civs on it; right now I have the most land area and 3 pretty good looking cities. I'm definitely playing tall, not wide.
