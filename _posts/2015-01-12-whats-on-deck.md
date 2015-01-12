@@ -1,3 +1,9 @@
+---
+published: true
+category: blog
+layout: blog
+---
+
 I'm guessing it's gonna be another light week at WSI, but I'll know for sure after tomorrow morning's standup. They shuffled some teams around and my standup is now at 11:00am instead of 9:45, which I'm not a super fan of. I also don't know how much need my team really has for my Java skillz; we went over the 2015 roadmap last week and the projects looked really front-end heavy. I guess I could see if those guys need any help, I'm trying to beef up my Javascript anyway to write the gabbo client.
 
 There's also this project the director asked to do months ago that I've basically been ignoring. I made a mention in a meeting that it'd be nice if our reference docs were searchable, and he thought it was a good idea and asked me to do it. It's not that hard, it's just a bunch of markdown documents and a Solr implementation, which is this search solution by um Apache I think.
