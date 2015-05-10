@@ -1,5 +1,5 @@
 ---
-publish: true
+published: true
 layout: blog
 ---
 
