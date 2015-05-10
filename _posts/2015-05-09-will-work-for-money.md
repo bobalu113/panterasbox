@@ -1,6 +1,7 @@
 ---
 published: true
 layout: blog
+category: blog
 ---
 
 Once again, I find myself looking for a job. Going to try to commit some of my thoughts on the process to paper this time.
