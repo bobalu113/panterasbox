@@ -30,13 +30,7 @@
       mmquote[15] = "I don't live here. I'm just here for the ladies.";
       mmquote[16] = "Maybe you should put some shorts on or something if you want to keep fighting evil today.";
       var i = Math.floor(16*Math.random());
-      var desc = document.createElement("meta");
-      desc.name = "description";
-      desc.content = "Pantera's Box: " + mmquote[i];
-
-      function do_mmquote() {
-        document.getElementById("project_tagline").innerHTML = mmquote[i];
-      }
+      document.write('<meta name="description" content="Pantera&#39;s Box: ' + mmquote[i] + '">');
     //-->
     </script>
 
