@@ -30,7 +30,8 @@
       mmquote[15] = "I don't live here. I'm just here for the ladies.";
       mmquote[16] = "Maybe you should put some shorts on or something if you want to keep fighting evil today.";
       var i = Math.floor(16*Math.random());
-      document.write('<meta name="description" content="Pantera&#39;s Box: ' + mmquote[i] + '">');
+      mmquote = mmquote[i];
+      document.write('<meta name="description" content="Pantera&#39;s Box: ' + mmquote + '">');
     //-->
     </script>
 
@@ -45,7 +46,7 @@
           <a id="forkme_banner" href="https://github.com/bobalu113/panterasbox">View on GitHub</a>
 
           <h1 id="project_title"><a href="{{site.baseurl}}">Pantera&#39;s Box</a></h1>
-          <h2 id="project_tagline"><script type="text/javascript">document.write(mmquote[i]);</script></h2>
+          <h2 id="project_tagline"><script type="text/javascript">document.write(mmquote);</script></h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/bobalu113/panterasbox/zipball/master">Download this project as a .zip file</a>
