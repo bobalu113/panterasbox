@@ -16,5 +16,5 @@ Saw Willie Nelson at the Mountain Winery last night, some highlights:
 
 5. Anyone that's been to the Winery knows that it gets cold up there and Willie played in a T-shirt the entire night. I know the stage gets a lot of heat from the lights but still! He's an old man! They get cold. All that rocking out must be great for the metabolism.
 
-6) Tickets to his shows are usually the most expensive on the schedule, so I got bleacher tickets for the first time since they redid the amphitheater. I don't know if I'll do it again. I found myself shifting around a lot because my butt would start to hurt, or the the bench would dig into my leg, or I couldn't stretch my legs out. Bringing a butt pad next time would help, but I think real seats are probably worth the extra money.
+6. Tickets to his shows are usually the most expensive on the schedule, so I got bleacher tickets for the first time since they redid the amphitheater. I don't know if I'll do it again. I found myself shifting around a lot because my butt would start to hurt, or the the bench would dig into my leg, or I couldn't stretch my legs out. Bringing a butt pad next time would help, but I think real seats are probably worth the extra money.
 
