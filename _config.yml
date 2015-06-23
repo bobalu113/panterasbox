@@ -1,0 +1,3 @@
+baseurl: /panterasbox
+permalink: pretty
+markdown: rdiscount
