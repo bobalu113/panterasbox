@@ -3,8 +3,7 @@ published: true
 category: blog
 layout: blog
 ---
-
-Saw Willie Nelson at the Mountain Winery last night, some highlights:
+Saw Willie Nelson at the Mountain Winery last night, here's some highlights:
 
 1. Willie played the only guitar (besides the bass), and he's a really good guitar player! I've always appreciated him for his song writing and his comforting voice, but I kinda disassociate him from his instrument when I listen to recordings. 
 
