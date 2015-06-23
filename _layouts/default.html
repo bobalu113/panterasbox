@@ -34,7 +34,7 @@
     //-->
     </script>
 
-    <title>Pantera&#39;s Box</title>
+    <title>{% if page.url != '/' %}{{page.title}}{% else %}Pantera&#39;s Box{% endif %}</title>
   </head>
 
   <body onLoad="mmquote();">
