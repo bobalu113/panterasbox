@@ -11,7 +11,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="http://bobalu113.github.io/panterasbox/stylesheets/stylesheet.css">
     <script type="text/javascript">
     <!--
-    function mmquote() {
       var mmquote = new Array(16);
       mmquote[0] = "Learn to hide your strikes from your opponent, and you'll more easily strike his hide.";
       mmquote[1] = "When you can balance a tack hammer on your head, you will head off your foes with a balanced attack.";
@@ -31,12 +30,13 @@
       mmquote[15] = "I don't live here. I'm just here for the ladies.";
       mmquote[16] = "Maybe you should put some shorts on or something if you want to keep fighting evil today.";
       var i = Math.floor(16*Math.random());
-      document.getElementById("project_tagline").innerHTML = mmquote[i];
-      
-      var x = document.createElement("meta");
-      x.name = "description";
-      x.content = "Pantera's Box: " + mmquote[i];
-    }
+      var desc = document.createElement("meta");
+      desc.name = "description";
+      desc.content = "Pantera's Box: " + mmquote[i];
+
+      function mmquote() {
+        document.getElementById("project_tagline").innerHTML = mmquote[i];
+      }
     //-->
     </script>
 
