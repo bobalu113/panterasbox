@@ -1,3 +1,9 @@
+---
+published: true
+category: blog
+layout: blog
+---
+
 A while back my director at Williams-Sonoma asked for interview question ideas, and I started composing an email about subjective vs. objective reasoning in the interview process. I never finished the email, but I thought I'd post an excerpt for a friend of mine that's trying to distill his work history down into a single page and was looking for a creative way to do it.
 
 This section of the email is where I actually offer an interview question that engages the interviewee to think subjectively about their career, as opposed to rattling a more objectively-minded list of accomplishments as most people tend to do. I wrote this specifically for programmers, but the core concept could easily be extended out to other professions.
