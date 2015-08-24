@@ -18,11 +18,11 @@ This section of the email is where I actually offer an interview question that e
 > 
 >    Soldier: Starts in the barracks. For players who are duty-minded in their approach to coding. Their motivation is to follow orders (or possibly give them). Advancement paths could include an officer path for those interested in architecture and different enlisted paths for generalists and specialists.
 > 
->    Student: Starts in the dormitory. For players new to coding, or those looking to expand their skill set. Would-be leadership might choose this path and eventually become professors and deans.
+>    Student: Starts in the dormitory. For players new to software engineering, or coders looking to expand their skill set into new areas. Would-be leadership might choose this path to eventually become professors and deans.
 > 
->    Tourist: Starts in the hostel. For players uninterested in a structured advancement tract, or that like to code in a variety of different spaces. Might lead nowhere, but still appeal to contractors, or players trying to earn experience faster.
+>    Tourist: Starts in the hostel. For players uninterested in an proper advancement tract, or who like to code in a variety of different spaces. Doesn't necessarily lead anywhere specific, but might still appeal to contractors, or players trying to earn experience faster.
 > 
->    Homeless: Starts on the bus. For players who are creative problem solvers, or coders trying to market themselves as distinct from the other classes. Would-be entrepreneurs might choose this path, or engineers that have fallen out of demand. Advancement is more challenging than the other classes, but this path could potentially lead to bigger rewards.
+>    Homeless: Starts on the bus. For players who are creative problem solvers, or coders trying to market themselves as distinct from the other classes. Would-be entrepreneurs might choose this path, or established engineers that have fallen out of demand. Advancement is more challenging than the other classes, but this path could potentially lead to bigger rewards.
 > 
 > The question is this. Which one are you? Wouldn't you want to know which one someone else is before you work with them?
 
