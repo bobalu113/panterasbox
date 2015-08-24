@@ -16,7 +16,7 @@ This section of the email is where I actually offer an interview question that e
 > 
 > Since everyone's a player, everyone must have at some point gone through this process of self-examination enforced by the character creation wizard. This can tell me all sorts of useful information about potential engineers. Information I can filter on. To illustrate, I have to tell you about one of the stages of character creation. There are four different character classes you can choose to play:
 > 
->    Soldier: Starts in the barracks. For players who duty-minded in their approach to coding. Their motivation is to follow orders (or possibly give them). Advancement paths could include an officer path for those interested in architecture and different enlisted paths for generalists and specialists.
+>    Soldier: Starts in the barracks. For players who are duty-minded in their approach to coding. Their motivation is to follow orders (or possibly give them). Advancement paths could include an officer path for those interested in architecture and different enlisted paths for generalists and specialists.
 > 
 >    Student: Starts in the dormitory. For players new to coding, or those looking to expand their skill set. Would-be leadership might choose this path and eventually become professors and deans.
 > 
