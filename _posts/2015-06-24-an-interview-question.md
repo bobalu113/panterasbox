@@ -22,7 +22,7 @@ This section of the email is where I actually offer an interview question that e
 > 
 >    Tourist: Starts in the hostel. For players uninterested in a structured advancement tract, or that like to code in a variety of different spaces. Might lead nowhere, but still appeal to contractors, or players trying to earn experience faster.
 > 
->    Homeless: Starts on the bus. For players who are creatively-minded, or coders trying to market themselves as distinct from the other classes. Would-be entrepreneurs might choose this path, or engineers that have fallen out of demand. Advancement is more challenging than the other classes, but this path could potentially lead to bigger rewards.
+>    Homeless: Starts on the bus. For players who are creative problem solvers, or coders trying to market themselves as distinct from the other classes. Would-be entrepreneurs might choose this path, or engineers that have fallen out of demand. Advancement is more challenging than the other classes, but this path could potentially lead to bigger rewards.
 > 
 > The question is this. Which one are you? Wouldn't you want to know which one someone else is before you work with them?
 
