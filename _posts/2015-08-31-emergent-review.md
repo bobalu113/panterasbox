@@ -173,7 +173,7 @@ You say: not everyone wants to make a good game, some people just want to be
 Poi says: bingo
 Taplash says: if that's the situation they shouldn't be coding as it leads
               to more issues later.
-Poi says: redwing and watcher are both guilty of that                . ^R
+Poi says: redwing and watcher are both guilty of that
 You say: maybe. love's a powerful motivator it'd be a shame to waste it
 Taplash says: it's really kind of a perverse situation though.
 You say: you should be used to that by now
