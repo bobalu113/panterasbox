@@ -5,8 +5,8 @@ layout: blog
 ---
 I thought I'd post a conversation from earlier tonight on EotL. It started out with some harmless bitching about a wizard taking the review process a little too personally and led to a quick dialog about motivation and emergent behavior. This comes as I'm about to introduce a new package I've developed to integrate the mudlib with GitHub, but I have to sell to the wizards first. Having access to some richer tools I think will be embraced by most of the lower wizards, even if it does force them to adjust their workflow a bit. The higher ups will probably be a bit harder to convince since they can be resistant to embracing external tech, but I've put together a pretty good looking MUD-based interface to GitHub's tools that I'm hoping will sway them. There's another piece to the pitch that I haven't told anyone about yet that will be the real challenge: I'm gonna try to convince EotL to go open-source. I'm still working on that one. 
 
-Anyway, here's the log I promised:
-<code><pre>Guido says: seriously though someone needs to talk to watcher about his
+Anyway, here's the log I promised:<!--
+--><code><pre>Guido says: seriously though someone needs to talk to watcher about his
             reactions to people taking the time to review his stuff, because
             it's not good
 Taplash says: did he blow out on someone else?
