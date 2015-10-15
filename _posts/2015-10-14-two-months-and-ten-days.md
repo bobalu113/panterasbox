@@ -1,3 +1,9 @@
+---
+published: true
+category: blog
+layout: blog
+---
+
 I got a job. I wanted to blog more during my job hunt but it didn't happen for whatever reason. Hopefully I'll be able to update more now that I'm reclaiming my comfort. Just in case I do, here's a quick recap of the last few months. I started the job hunt in August by experimenting with a different approach to marketing myself. I focused more on LinkedIn than a traditional resume and tried to use a more subjective, narrative-based approach to demonstrating my value as a prospective employee. It didn't really work out; examining why not would an interesting topic for another post, but I'll just say here that without meeting a baseline response rate, I had to switch my strategy or I'd go broke.
 <!-- more -->
 After a couple weeks of relying on my LinkedIn profile, I hunkered down and wrote a real resume. I drew a little bit of inspiration from the job profiles I'd authored two weeks earlier, and I kept a copy of my previous resume for reference (last updated circa 2008), but it was otherwise a page one rewrite. As soon as I published it, it immediately started generating responses. 
