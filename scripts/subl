@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+
+use Cwd 'abs_path';
+
+sub subl {
+  my $file = $_; 
+  $file = abs_path($file); 
+  $file =~ s!^/vagrant/!c:/work/!; 
+  return $file; 
+}
+
+@ARGV = map( &subl, @ARGV );
+print("@ARGV\n");
+exec "ssh", "bobal_000\@10.0.2.2", "/cygdrive/c/Program\\ Files/Sublime\\ Text\\ 3/subl.exe", @ARGV;
+
