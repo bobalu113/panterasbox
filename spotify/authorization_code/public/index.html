@@ -4,7 +4,7 @@
     <title>Example of the Authorization Code flow with Spotify</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <style type="text/css">
-      #login, #loggedin {
+      #login, #loggedin, #success, #error {
         display: none;
       }
       .text-overflow {
@@ -57,17 +57,21 @@
       <h1>Logged in as {{display_name}}</h1>
       <div class="media">
         <div class="media-body">
-          Copy weekly playlist entries:
-          <select name="operation">
-            <option value="append">Append to</option>
-            <option value="overwrite">Overwrite</option>
-          </select>
-          <select name="playlist">
+          Copy from playlist
+          <select id="copyfrom">
           {{#each playlists}}
             <option value="{{id}}">{{name}}</option>
           {{/each}}
           </select>
-          <button id="copy">Copy</button>
+          to playlist
+          <select id="copyto">
+          {{#each playlists}}
+            <option value="{{id}}">{{name}}</option>
+          {{/each}}
+          </select>
+          <button id="copy-button">Copy</button>
+          <span id="success">Success</span>
+          <span id="error">Error</span>
         </div>
       </div>
     </script>
@@ -139,6 +143,22 @@
 
                   $('#login').hide();
                   $('#loggedin').show();
+
+                  document.getElementById('copy-button').addEventListener('click', function() {
+                    $.ajax({
+                      url: '/copy_playlist',
+                      data: {
+                        'access_token': access_token,
+                        'from_id': $('#copyfrom').val(),
+                        'to_id': $('#copyto').val()
+                      },
+                      success: function(response) {
+                        $('#error').hide();
+                        $('#success').show();
+                      }
+                    });
+                  }, false);
+
                 }
             });
           } else {
@@ -161,6 +181,7 @@
               });
             });
           }, false);
+
         }
       })();
     </script>

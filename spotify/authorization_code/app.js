@@ -56,7 +56,6 @@ app.get('/dashboard', function(req, res) {
       headers: { 'Authorization': 'Bearer ' + access_token },
       json: true
     }, function(error, response, body) {
-      console.log(body);
       out.playlists = body.items.map(function(x) {
         return {
           id: x.id,
@@ -67,6 +66,36 @@ app.get('/dashboard', function(req, res) {
     });
   });
 });
+
+app.get('/copy_playlist', function(req, res){
+  var access_token = req.query.access_token;
+  var copyfrom = req.query.from_id;
+  var copyto = req.query.to_id;
+  
+  // get track ids in from playlist
+  request.get({
+    url: 'https://api.spotify.com/v1/users/' + out.id + '/playlists/' + copyfrom + '/tracks',
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  })
+  // get track ids in to playlist
+  request.get({
+    url: 'https://api.spotify.com/v1/users/' + out.id + '/playlists/' + copyto + '/tracks',
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  })
+  // add unique ids to to playlist
+  request.post({
+    url: 'https://api.spotify.com/v1/users/' + out.id + '/playlists/' + copyto + '/tracks',
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    form: {
+      uris: "",
+    },
+    json: true
+  })
+  console.log("copyfrom: " + copyfrom);
+
+})
 
 app.get('/login', function(req, res) {
 
