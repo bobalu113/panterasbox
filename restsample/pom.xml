@@ -102,9 +102,28 @@
         </configuration>
       </plugin>
       <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>      
+      </plugin>
+      <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+		  <path>/${project.build.finalName}</path>
+		  <update>true</update>
+		  <url>http://localhost:8080/manager/text</url>
+          <username>tomcat</username>
+          <password>tomcat</password>
+        </configuration>
       </plugin>
     </plugins>
   </build>
