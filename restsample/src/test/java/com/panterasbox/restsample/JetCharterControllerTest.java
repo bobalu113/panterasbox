@@ -41,6 +41,7 @@ public class JetCharterControllerTest {
   private static final double TEST_AIRSPEED = 500.0;
   private static final double TEST_RANGE = 2000.0;
   private static final double TEST_DISTANCE = 5000.0;
+  private static final double TEST_FLIGHT_TIME = 660.0;
   
   private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
                                                 MediaType.APPLICATION_JSON.getSubtype(),
@@ -237,6 +238,6 @@ public class JetCharterControllerTest {
       .param("toY", String.valueOf(0.0)))
       .andExpect(status().isOk())
       .andExpect(content().contentType(contentType))
-      .andExpect(jsonPath("$", is(660.0)));
+      .andExpect(jsonPath("$", is(TEST_FLIGHT_TIME)));
   }
 }
