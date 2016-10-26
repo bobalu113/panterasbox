@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.panterasbox.ecommerce.search</groupId>
+    <artifactId>wsgc-cell-manager</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.panterasbox.ecommerce.search</groupId>
+  <artifactId>wsgc-cell-manager-impl</artifactId>
+  <name>Endeca Cell Manager - Application Implementation</name>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.wsgc.ecommerce.search</groupId>
+      <artifactId>wsgc-cell-manager-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.wsgc.ecommerce.foundation</groupId>
+      <artifactId>wsgc-common-api</artifactId>
+      <version>${foundation.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.wsgc.ecommerce.foundation</groupId>
+      <artifactId>wsgc-caching</artifactId>
+      <version>${foundation.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>org.springframework.jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.endeca</groupId>
+      <artifactId>endeca_navigation</artifactId>
+      <version>6.1.2</version>
+    </dependency>
+  </dependencies>
+</project>

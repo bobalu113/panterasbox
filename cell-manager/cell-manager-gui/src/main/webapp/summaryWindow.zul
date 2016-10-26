@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:zk="http://www.zkoss.org/2005/zk"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+        
+  <window id="summaryWindow" title="Version Summary" border="normal" width="420px" 
+          position="center,center" closable="true" action="show: slideDown; hide: slideUp"
+          apply="org.zkoss.bind.BindComposer"
+          viewModel="@id('summaryVM')
+                     @init('com.panterasbox.ecommerce.search.cellmanager.gui.help.SummaryViewModel')">
+
+    <vlayout>
+      <grid>
+        <rows>
+          <row>
+            <label value="Cell Manager version" />
+            <label value="@load(summaryVM.cellManagerVersion)"/>
+          </row>
+          <row>
+            <label value="Foundation version" />
+            <label value="@load(summaryVM.foundationVersion)"/>
+          </row>
+          <row>
+            <label value="ZK version" />
+            <label value="@load(summaryVM.zkVersion)"/>
+          </row>
+          <row>
+            <label value="ZK-Spring version" />
+            <label value="@load(summaryVM.zkSpringVersion)"/>
+          </row>
+        </rows>
+      </grid>
+    </vlayout>
+    
+  </window>
+
+</zk>

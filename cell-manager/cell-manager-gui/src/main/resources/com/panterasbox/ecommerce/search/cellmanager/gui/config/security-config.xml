@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:sec="http://www.springframework.org/schema/security"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.4.xsd
+                http://www.springframework.org/schema/jee
+                http://www.springframework.org/schema/jee/spring-jee-3.1.xsd">
+
+  <bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+    <sec:filter-chain-map path-type="ant">
+      <sec:filter-chain pattern="/**"
+        filters="wsiRequestContextSecurityFilter,wsiSessionContextIntegrationFilter,authenticationProcessingFilter,
+                 exceptionTranslationFilter,channelProcessingFilter" />
+    </sec:filter-chain-map>
+  </bean>
+
+  <!-- The authentication manager, manages one or more providers -->
+  <sec:authentication-manager alias="authenticationManager">
+    <sec:authentication-provider ref='authenticationProvider' />
+  </sec:authentication-manager>
+
+  <jee:jndi-lookup id="jndiLdapUrl" jndi-name="java:comp/env/LdapUrl" />
+
+  <jee:jndi-lookup id="jndiLdapManagerDn" jndi-name="java:comp/env/LdapManagerDn"
+    default-value="" />
+
+  <jee:jndi-lookup id="jndiLdapManagerPassword" jndi-name="java:comp/env/LdapManagerPassword" />
+
+  <jee:jndi-lookup id="jndiLdapSearchBase" jndi-name="java:comp/env/LdapSearchBase"
+    default-value="" />
+
+  <jee:jndi-lookup id="jndiLdapSearchFilter" jndi-name="java:comp/env/LdapSearchFilter"
+    default-value="(sAMAccountName={0})" />
+
+  <bean id="initialDirContextFactory"
+    class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+    <constructor-arg ref="jndiLdapUrl" />
+    <property name="userDn" ref="jndiLdapManagerDn" />
+    <property name="password" ref="jndiLdapManagerPassword" />
+  </bean>
+
+  <jee:jndi-lookup id="securityDataSource" jndi-name="jdbc/SecurityDB"
+    resource-ref="true" />
+
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="securityDataSource" />
+  </bean>
+
+  <bean id="authoritiesPopulator" class="com.wsgc.ecommerce.security.ldap.JdbcAuthoritiesPopulator">
+    <property name="jdbcTemplate" ref="jdbcTemplate" />
+  </bean>
+
+  <bean id="securityLockoutLogger"
+    class="com.wsgc.ecommerce.security.lockout.StandardSecurityLockoutLogger">
+    <property name="dateFormat" value="yyyy.MM.dd HH:mm:ss z" />
+  </bean>
+  <bean id="securityLockout" class="com.wsgc.ecommerce.security.lockout.StandardSecurityLockout">
+    <property name="settingsService" ref="settingsService" />
+    <property name="securityLockoutLogger" ref="securityLockoutLogger" />
+  </bean>
+
+  <!-- Using Active Directory as the authentication provider -->
+  <bean id="authenticationProvider"
+    class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+    <constructor-arg>
+      <bean
+        class="org.springframework.security.ldap.authentication.BindAuthenticator">
+        <constructor-arg>
+          <ref bean="initialDirContextFactory" />
+        </constructor-arg>
+        <property name="userSearch">
+          <ref local="userSearch" />
+        </property>
+      </bean>
+    </constructor-arg>
+    <constructor-arg>
+      <ref local="authoritiesPopulator" />
+    </constructor-arg>
+  </bean>
+
+  <bean id="userSearch"
+    class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+    <constructor-arg index="0" ref="jndiLdapSearchBase" />
+    <constructor-arg index="1" ref="jndiLdapSearchFilter" />
+    <constructor-arg index="2">
+      <ref local="initialDirContextFactory" />
+    </constructor-arg>
+    <property name="searchSubtree">
+      <value>true</value>
+    </property>
+  </bean>
+
+  <!-- Enforce use of HTTP or HTTPS by URL pattern -->
+  <bean id="channelProcessingFilter"
+    class="org.springframework.security.web.access.channel.ChannelProcessingFilter">
+    <property name="channelDecisionManager">
+      <ref bean="channelDecisionManager" />
+    </property>
+    <property name="securityMetadataSource">
+      <sec:filter-security-metadata-source path-type="ant" lowercase-comparisons="true">
+        <sec:intercept-url pattern="/**/*" access="REQUIRES_SECURE_CHANNEL" />
+      </sec:filter-security-metadata-source>
+    </property>
+  </bean>
+
+  <bean id="channelDecisionManager"
+    class="org.springframework.security.web.access.channel.ChannelDecisionManagerImpl">
+    <property name="channelProcessors">
+      <list>
+        <bean
+          class="org.springframework.security.web.access.channel.SecureChannelProcessor">
+          <property name="entryPoint">
+            <ref bean="httpsEntryPoint" />
+          </property>
+        </bean>
+        <bean
+          class="org.springframework.security.web.access.channel.InsecureChannelProcessor">
+          <property name="entryPoint">
+            <ref bean="httpEntryPoint" />
+          </property>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="httpsEntryPoint"
+    class="com.wsgc.ecommerce.security.filters.WSIRetryWithHttpsEntryPoint">
+    <property name="absoluteUrlMapper" ref="absoluteUrlMapper" />
+  </bean>
+
+  <bean id="httpEntryPoint"
+    class="com.wsgc.ecommerce.security.filters.WSIRetryWithHttpEntryPoint">
+    <property name="absoluteUrlMapper" ref="absoluteUrlMapper" />
+  </bean>
+
+  <!-- Store Authentication credentials in the HttpSession -->
+
+  <bean id="httpSessionContextIntegrationFilter"
+    class="org.springframework.security.web.context.HttpSessionContextIntegrationFilter" />
+
+  <bean id="wsiSessionContextIntegrationFilter"
+    class="com.wsgc.ecommerce.security.filters.WSISessionContextIntegrationFilter" />
+
+
+  <bean id="wsiRequestContextSecurityFilter"
+    class="com.wsgc.ecommerce.security.filters.RequestContextSecurityFilter">
+    <property name="requestContextFactory" ref="requestContextFactory" />
+    <property name="sessionService" ref="sessionService" />
+    <property name="disableTrackingUrlPattern" value="/heartbeat.html|/dcinfo.html|/summary.html" />
+  </bean>
+
+  <!-- Perform the actual authentication -->
+  <bean id="authenticationProcessingFilter"
+    class="com.wsgc.ecommerce.security.filters.WSIAuthenticationProcessingFilter">
+    <property name="sessionService" ref="sessionService" />
+    <property name="userNameValidation" value="false" />
+    <property name="filterProcessesUrl">
+      <value>/authenticate.html</value>
+    </property>
+    <property name="authenticationManager">
+      <ref local="authenticationManager" />
+    </property>
+    <property name="usernameParameter" value="username" />
+    <property name="passwordParameter" value="password" />
+    <property name="authenticationSuccessHandler">
+      <bean
+        class="com.wsgc.ecommerce.security.handlers.WSISavedRequestAwareAuthenticationSuccessHandler">
+        <property name="defaultTargetUrl">
+          <value>/authSuccess.zul</value>
+        </property>
+        <property name="targetUrlParameter" value="targetUrl" />
+        <property name="sessionService" ref="sessionService" />
+        <property name="requestContextFactory" ref="requestContextFactory" />
+      </bean>
+    </property>
+    <property name="authenticationFailureHandler">
+      <bean
+        class="com.wsgc.ecommerce.security.handlers.WSISimpleAuthenticationFailureHandler">
+        <property name="defaultFailureUrl">
+          <value>/authFailed.zul</value>
+        </property>
+        <property name="sessionService" ref="sessionService" />
+        <property name="absoluteUrlMapper" ref="absoluteUrlMapper" />
+      </bean>
+    </property>
+  </bean>
+
+
+  <!-- Deal with follow-on siutations when access to the resource is not given
+    in this request. Customizing ExceptionTranslationFilter to avoid httpsession from
+    getting created while handing AuthenticationException -->
+  <bean id="exceptionTranslationFilter"
+    class="com.wsgc.ecommerce.security.filters.WSIExceptionTranslationFilter">
+    <property name="requestContextFactory" ref="requestContextFactory" />
+    <property name="sessionService" ref="sessionService" />
+    <property name="authenticationEntryPoint">
+      <ref bean="authenticationProcessingFilterEntryPoint" />
+    </property>
+    <property name="accessDeniedHandler">
+      <bean class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+        <property name="errorPage" value="/accessdenied.html" />
+      </bean>
+    </property>
+  </bean>
+
+  <!-- If this request needs authentication, point to the login -->
+  <bean id="authenticationProcessingFilterEntryPoint"
+    class="com.wsgc.ecommerce.security.filters.WSIAuthenticationProcessingFilterEntryPoint">
+    <property name="absoluteUrlMapper" ref="absoluteUrlMapper" />
+    <property name="loginFormUrl">
+      <value>/login.html</value>
+    </property>
+    <property name="forceHttps">
+      <value>true</value>
+    </property>
+  </bean>
+
+  <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+    <property name="decisionVoters">
+      <list>
+        <bean class="org.springframework.security.access.vote.RoleVoter" />
+      </list>
+    </property>
+  </bean>
+
+</beans>

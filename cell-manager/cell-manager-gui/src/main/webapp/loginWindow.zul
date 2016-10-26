@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:zk="http://www.zkoss.org/2005/zk"
+    xmlns:n="http://www.zkoss.org/2005/zk/native"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+        
+  <window id="loginWindow" title="Cell Manager Login" border="normal" width="360px" 
+          position="center,center" closable="true" action="show: slideDown; hide: slideUp">
+
+    <vlayout>
+      <label id="loginError" value="Invalid username/password." 
+        style="color: red; align: center;" visible="false"/>
+      <grid>
+        <rows>
+          <row>
+            <label value="Username" />
+            <n:input type="text" id="username" />
+          </row>
+          <row>
+            <label value="Password" />
+            <n:input type="password" id="password" />
+          </row>
+        </rows>
+      </grid>
+      <hbox hflex="1" pack="center">
+        <n:button id="loginButton" label="Sign In">
+          <attribute n:name="onClick"><![CDATA[
+            document.getElementById("loginButton").disabled = true;
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            
+            var URL = "authenticate.html";
+            var queryString = "username=" + username + "&password=" + password;
+            
+            var xmlHttpReq;
+            if (window.XMLHttpRequest) {
+                xmlHttpReq = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            
+            xmlHttpReq.open("POST", URL, false);
+            xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xmlHttpReq.onload = function() {
+                document.getElementById("loginButton").disabled = false;
+            }
+            xmlHttpReq.send(queryString);
+          ]]></attribute>Sign In
+        </n:button>
+      </hbox>
+    </vlayout>
+    
+  </window>
+
+</zk>

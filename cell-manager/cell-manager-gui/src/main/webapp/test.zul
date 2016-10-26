@@ -1,0 +1,14 @@
+  <tabbox height="100%">
+    <tabs>
+        <tab label="asdf" selected="true" closable="true"/>
+    </tabs>
+    <tabpanels>
+        <tabpanel>
+<borderlayout><center>
+stinkbutt
+</center></borderlayout>
+        </tabpanel>
+    </tabpanels>
+  </tabbox>
+
+

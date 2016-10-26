@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:jee="http://www.springframework.org/schema/jee"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/jee 
+    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+  <bean id="cellInformationService" class="com.panterasbox.ecommerce.search.cellmanager.service.impl.StandardCellInformationService">
+    <property name="cellRootPath" value="${cell.root.path}" />
+    <property name="cellConfigPath" value="${cell.cellconfig.path}" />
+    <property name="genConfigPath" value="${cell.genconfig.path}" />
+    <property name="cellDetailsFactory" ref="cellDetailsFactory" />
+  </bean>
+  
+  <bean id="activeEcomGenerationsElementFactory" class="com.panterasbox.ecommerce.search.cellmanager.caching.ActiveEcomGenerationsElementFactory">
+    <property name="ecomGenerationQueryDAO" ref="ecomGenerationQueryDAO" />
+  </bean>
+  
+  <bean id="activeEcomGenerationsCache" class="com.wsgc.ecommerce.caching.PopulatingCacheFactoryBean">
+    <property name="cacheManager" ref="cacheManager"/>
+    <property name="elementFactory" ref="activeEcomGenerationsElementFactory"/>
+    <property name="cacheName" value="activeEcomGenerationsCache"/>
+    <property name="settingsService" ref="settingsService"/>
+    <property name="timeToLiveSettingName" value="ECOMGENERATIONSTTL"/>
+  </bean>
+  
+  <bean id="ecomGenerationQueryDAO" class="com.panterasbox.ecommerce.search.cellmanager.service.impl.EcomGenerationQueryDAO">
+    <property name="dataSource" ref="dataSource" />
+    <property name="appSpecification" ref="appSpecification" />
+  </bean>
+
+  <bean id="metadataQueryResultsElementFactory" class="com.panterasbox.ecommerce.search.cellmanager.caching.MetadataQueryResultsElementFactory" />
+  
+  <bean id="metadataQueryResultsCache" class="com.wsgc.ecommerce.caching.PopulatingCacheFactoryBean">
+    <property name="cacheManager" ref="cacheManager"/>
+    <property name="elementFactory" ref="metadataQueryResultsElementFactory"/>
+    <property name="cacheName" value="metadataQueryResultsCache"/>
+    <property name="settingsService" ref="settingsService"/>
+    <property name="timeToLiveSettingName" value="METATDATARESULTSTTL"/>
+  </bean>
+  
+  <bean id="generationQueryService" class="com.panterasbox.ecommerce.search.cellmanager.service.impl.StandardGenerationQueryService">
+        <property name="metadataQueryResultsCache" ref="metadataQueryResultsCache"/>
+        <property name="activeEcomGenerationsCache" ref="activeEcomGenerationsCache"/>
+  </bean>
+ 
+  <bean id="cellDetailsFactory" class="com.panterasbox.ecommerce.search.cellmanager.model.CellDetailsFactory">
+    <property name="dgraphDetailsFactory" ref="dgraphDetailsFactory"/>
+  </bean>
+
+  <bean id="dgraphDetailsFactory" class="com.panterasbox.ecommerce.search.cellmanager.model.DgraphDetailsFactory">
+    <property name="generationQueryService" ref="generationQueryService" />
+  </bean>
+
+</beans>

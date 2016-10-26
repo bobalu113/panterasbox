@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    To get tomcat up and running, you'll need to copy admin.xml and admin-sample.xml
+    into the correct configuration directory for your tomcat installation and
+    then modify the paths and passwords so that they are correct for the server
+    you're pointing to.
+
+    For developers using windows and the devtools2008 package, and who have
+    checked out the dp source from the shortcut location from:
+
+        https://thevault/svn/shortcuts/evolution/trunk
+
+    into C:\Projects\ecommerce, the following pathnames should be correct and
+    the developer will only need to fill in the proper passwords for LDAP and
+    the database connection.
+
+    $Id: admin.xml 88228 2009-04-17 15:09:04Z pcoroli $
+-->
+<!-- The contents of this file will be loaded for each web application -->
+<Context docBase="D:\work\cell-manager\cell-manager-gui\target\wsgc-cell-manager-gui-1.0-SNAPSHOT.war" reloadable="true" unpackWAR="false">
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <Environment name="AppSpecLocation" value="file:D:\work\cell-manager\cell-manager-gui\src\main\tomcat\app-specification.properties"
+         type="java.lang.String" override="false"/>
+    <Environment name="LdapUrl" value=""
+         type="java.lang.String" override="false"/>
+
+    <Environment name="LdapManagerPassword" value=""
+         type="java.lang.String" override="false"/>
+
+    <Environment name="LdapManagerDn" value=""
+         type="java.lang.String" override="false"/>
+
+    <Resource name="jdbc/EcomDB" auth="Container" type="javax.sql.DataSource"
+        driverClassName="oracle.jdbc.OracleDriver" url=""
+        username="" password="" maxActive="2" maxIdle="2" maxWait="-1"/>
+
+    <Resource name="jdbc/SecurityDB" auth="Container" type="javax.sql.DataSource"
+        driverClassName="oracle.jdbc.OracleDriver" url=""
+        username="" password="" maxActive="2" maxIdle="2" maxWait="-1"/>
+
+</Context>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->

@@ -1,0 +1,113 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/jee 
+    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+    
+    <jee:jndi-lookup id="catalogServicesPropertiesLocation" jndi-name="java:comp/env/catalogServicesPropertiesLocation" />
+    
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" ref="catalogServicesPropertiesLocation" />
+    </bean>
+    
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+        <list>
+            <ref bean="trigger_process_PB" />
+            <ref bean="trigger_process_PK" />
+            <ref bean="trigger_process_PT" />
+            <ref bean="trigger_process_WS" />
+            <ref bean="trigger_process_WE" />
+        </list>
+        </property>
+    </bean>
+    
+    <bean id="trigger_process_PB"
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="doProcessJob_PB" />
+        <property name="cronExpression" value="${process.pb.cron.expression}" />
+    </bean>
+    <bean id="doProcessJob_PB"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzJobController" />
+        <property name="targetMethod" value="processAll" />
+        <property name="arguments" >
+          <list>
+            <value type="java.lang.String">${merchantid.pb}</value>
+          </list>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>  
+    <bean id="trigger_process_PK"
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="doProcessJob_PK" />
+        <property name="cronExpression" value="${process.pk.cron.expression}" />
+    </bean>
+    <bean id="doProcessJob_PK"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzJobController" />
+        <property name="targetMethod" value="processAll" />
+        <property name="arguments" >
+          <list>
+            <value type="java.lang.String">${merchantid.pk}</value>
+          </list>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean> 
+    <bean id="trigger_process_PT"
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="doProcessJob_PT" />
+        <property name="cronExpression" value="${process.pt.cron.expression}" />
+    </bean>
+    <bean id="doProcessJob_PT"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzJobController" />
+        <property name="targetMethod" value="processAll" />
+        <property name="arguments" >
+          <list>
+            <value type="java.lang.String">${merchantid.pt}</value>
+          </list>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="trigger_process_WS"
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="doProcessJob_WS" />
+        <property name="cronExpression" value="${process.ws.cron.expression}" />
+    </bean>
+    <bean id="doProcessJob_WS"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzJobController" />
+        <property name="targetMethod" value="processAll" />
+        <property name="arguments" >
+          <list>
+            <value type="java.lang.String">${merchantid.ws}</value>
+          </list>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="trigger_process_WE"
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="doProcessJob_WE" />
+        <property name="cronExpression" value="${process.we.cron.expression}" />
+    </bean>
+    <bean id="doProcessJob_WE"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzJobController" />
+        <property name="targetMethod" value="processAll" />
+        <property name="arguments" >
+          <list>
+            <value type="java.lang.String">${merchantid.we}</value>
+          </list>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    
+</beans>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<!-- This file configures jetty, which is intended to be used by developers running
+  the services from their local desktops. $Id: jetty-env.xml 6048 2011-02-23 22:46:04Z
+  bschaetzle $ -->
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+  <Set name="contextPath">/</Set>
+  <Set name="baseResource">
+    <New class="org.mortbay.resource.ResourceCollection">
+      <Arg>
+        <Array type="java.lang.String">
+          <Item>src/main/webapp</Item>
+        </Array>
+      </Arg>
+    </New>
+  </Set>
+
+  <New id="CellManagerPropertiesLocation" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>CellManagerPropertiesLocation</Arg>
+    <Arg type="java.lang.String">file:./src/main/jetty/cell-manager.properties</Arg>
+  </New>
+
+  <New id="MailSession" class="org.mortbay.jetty.plus.naming.Resource">
+    <Arg>mail/MailSession</Arg>
+    <Arg>
+      <New class="org.mortbay.naming.factories.MailSessionReference">
+        <Set name="properties">
+          <New class="java.util.Properties">
+            <Put name="mail.smtp.host"></Put>
+            <Put name="mail.smtp.port"></Put>
+            <Put name="mail.debug">true</Put>
+          </New>
+        </Set>
+      </New>
+    </Arg>
+  </New>
+
+  <New id="AppSpecLocation" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>AppSpecLocation</Arg>
+    <Arg type="java.lang.String">file:./src/main/jetty/app-specification.properties</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+  <New id="LdapUrl" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>LdapUrl</Arg>
+    <Arg type="java.lang.String"></Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+  <New id="LdapManagerPassword" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>LdapManagerPassword</Arg>
+    <Arg type="java.lang.String"></Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+  <New id="LdapManagerDn" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>LdapManagerDn</Arg>
+    <Arg type="java.lang.String"></Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+  <New id="EcomDB" class="org.mortbay.jetty.plus.naming.Resource">
+    <Arg>jdbc/EcomDB</Arg>
+    <Arg>
+      <New class="oracle.jdbc.pool.OracleConnectionPoolDataSource">
+        <Set name="URL"></Set>
+        <Set name="User"></Set>
+        <Set name="Password"></Set>
+      </New>
+    </Arg>
+  </New>
+  <New id="SecurityDB" class="org.mortbay.jetty.plus.naming.Resource">
+    <Arg>jdbc/SecurityDB</Arg>
+    <Arg>
+      <New class="org.apache.commons.dbcp.BasicDataSource">
+        <Set name="driverClassName">oracle.jdbc.pool.OracleConnectionPoolDataSource</Set>
+        <!-- qa/uat -->
+        <Set name="Url"></Set>
+        <Set name="Username"></Set>
+        <Set name="Password"></Set>
+      </New>
+    </Arg>
+  </New>
+
+  <New id="JMSProviderUrl" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>JMSProviderUrl</Arg>
+    <Arg type="java.lang.String"></Arg>
+  </New>
+  <New id="JMSUsername" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>JMSUsername</Arg>
+    <Arg type="java.lang.String"></Arg>
+  </New>
+  <New id="JMSPassword" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>JMSPassword</Arg>
+    <Arg type="java.lang.String"></Arg>
+  </New>
+  <New id="JMSDestinationName" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>JMSDestinationName</Arg>
+    <Arg type="java.lang.String"></Arg>
+  </New>
+  <New id="JMSSubscriberClientId" class="org.mortbay.jetty.plus.naming.EnvEntry">
+    <Arg>JMSSubscriberClientId</Arg>
+    <Arg type="java.lang.String"></Arg>
+  </New>
+</Configure>

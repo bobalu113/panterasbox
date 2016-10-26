@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:zk="http://www.zkoss.org/2005/zk"
+    xmlns:w="http://www.zkoss.org/2005/zk/client"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+
+<style>
+.failed { 
+  color: red;
+  font-weight: bold;
+}
+.activating { 
+  color: blue;
+  font-weight: bold;
+}
+.active { 
+  color: green; 
+  font-weight: bold;
+}
+.selected-dgraph-header .z-tab-accordion-header, 
+.selected-dgraph-header .z-tab-accordion-hl, 
+.selected-dgraph-header .z-tab-accordion-hr, 
+.selected-dgraph-header .z-tab-accordion-hm,
+.selected-dgraph-header .z-tab-accordion-text, 
+.selected-dgraph-header .z-tab-accordion-close {
+  background-image:url(/zkau/web/zul/img/grid/header-over.png);
+}
+</style>
+
+<borderlayout width="100%" height="100%" vflex="1">
+                         
+  <west size="50%" splittable="true"
+        apply="org.zkoss.bind.BindComposer" 
+        viewModel="@id('cellSummaryVM') 
+                   @init('com.panterasbox.ecommerce.search.cellmanager.gui.dashboard.CellSummaryViewModel')">
+    <groupbox mold="3d">
+      <caption label="Cell Summary"/>
+  
+      <listbox model="@load(cellSummaryVM.cells)" 
+               selectedItem="@bind(cellSummaryVM.selectedCell)"
+               onSelect="@global-command('dashboardSelectCell', cell=cellSummaryVM.selectedCell)">
+        <listhead sizable="true">
+          <listheader label="WB" hflex="min" sort="auto(workbenchEnabled)" align="center"/>
+          <listheader label="Name" hflex="min" sort="auto(name)"/>
+          <listheader label="Site" hflex="min" sort="auto(site)"/>
+          <listheader label="Installation" hflex="min" sort="auto(installation)"/>
+          <listheader label="Last Updated" hflex="min" sort="auto(lastUpdate)"/>
+          <listheader label="Status" sort="auto(status)"/>
+        </listhead>
+      
+        <template name="model" var="cell">
+          <listitem>
+            <listcell>
+              <button image="images/wrench-arrow.png" visible="@load(cell.workbenchEnabled)"
+                      onClick="@command(value=cell.workbenchEnabled ? 'goWorkbench' : '', cell=cell)"
+                      tooltip="workbenchTooltip"/>
+            </listcell>
+            <listcell label="@load(cell.name)"/>
+            <listcell label="@load(cell.site)"/>
+            <listcell label="@load(cell.installation)"/>
+            <listcell label="@load(cell.lastUpdate) @converter('formatedDate', format='yyyy/MM/dd HH:mm:ss')"/>
+            <listcell><label value="@load(cell.status)" sclass="${c:toLowerCase(cell.status)}"/></listcell>
+          </listitem>
+        </template>
+      </listbox>
+      
+      <popup id="workbenchTooltip" width="180px">
+        <style> 
+         #${workbenchTooltip.uuid} * {background-color:lightyellow} 
+        </style>
+        <label sclass="workbenchTooltip" value="Click to open workbench application in new tab."/>
+      </popup>
+      
+      <timer delay="2000" repeats="true" running="true" onTimer="@command('refreshCells')"/>
+      
+    </groupbox>
+  </west>
+
+  <center border="0">
+    <borderlayout width="100%" height="100%" vflex="1">
+    
+      <north size="45%" splittable="true"
+             apply="org.zkoss.bind.BindComposer" 
+             viewModel="@id('dgraphStatusVM') 
+                        @init('com.panterasbox.ecommerce.search.cellmanager.gui.dashboard.DgraphStatusViewModel')">
+             
+        <groupbox mold="3d" width="100%" vflex="1" contentStyle="overflow:auto">
+          <caption label="@load(dgraphStatusVM.dgraphStatusLabel)">
+            <!-- For some reason, child label components get right-aligned,
+                 when the label attribute of the caption component gets 
+                 left-aligned. Couldn't figure out how to fix so created a 
+                 new bean prop.  (don't try re-styling z-caption-r to left
+                 align, it prepends an annoying nbsp that you can't get
+                 rid of.)
+            <label value="Dgraph Status" style="font-weight: bold;" />
+            <label value="@load(dgraphStatusVM.cell eq null ? '' : ' - ')" style="font-weight: bold;" />
+            <label value="@load(dgraphStatusVM.cell.name)" style="font-weight: bold;" />
+             -->
+             <!-- // FUTURE make a refresh button macro component -->
+            <script type="text/javascript">
+              var refreshTime = 10;
+              mouseOver = false;
+            </script>
+            <timer delay="1000" repeats="true" running="true">
+              <attribute w:name="onTimer">
+                refreshTime--;
+                if (refreshTime == 0) {
+                  zAu.send(new zk.Event(zk.Widget.$("$refreshButton"), "onClick", null), 10);
+                  refreshTime = 10;
+                }
+                if (!mouseOver) {
+                  this.$f().refreshButton.setLabel('Refreshing in ' + refreshTime + '...');
+                }
+              </attribute>
+            </timer>
+            <toolbarbutton id="refreshButton" label="" image="images/arrow-circle-double.png" 
+                           visible="@load(dgraphStatusVM.cell eq null ? false : true)"
+                           onClick="@command('refreshDgraphs')"
+                           w:onClick="refreshTime = 10"
+                           w:onMouseOver="mouseOver = true; this.setLabel('Refresh Now')"
+                           w:onMouseOut="mouseOver = false; this.$f().refreshButton.setLabel('Refreshing in ' + refreshTime + '...')"
+                           w:onLoad="this.$f().refreshButton.setLabel('Refreshing in ' + refreshTime + '...')"/>
+          </caption>
+          
+          <label value="To view the Dgraphs for a cell, select from the listbox to the left." 
+                 style="font-weight: bold;"
+                 visible="@load(dgraphStatusVM.cell eq null ? true : false)"/>
+    
+          <label value="No Dgraphs have been configured." 
+                 style="font-weight: bold;"
+                 visible="@load(dgraphStatusVM.cell ne null and empty dgraphStatusVM.dgraphs ? true : false)"/>
+
+          <tabbox mold="accordion" visible="@load(empty dgraphStatusVM.dgraphs ? false : true)">
+    
+            <tabs children="@load(dgraphStatusVM.dgraphs)">
+              <template name="children" var="dgraph">
+                <tab label="@load(dgraph) 
+                            @converter('com.panterasbox.ecommerce.search.cellmanager.gui.dashboard.DgraphConverter', 
+                                       dgraphIndex=dgraphStatus.index)"
+                     selected="@load(dgraphStatusVM.selectedDgraph eq dgraph)"
+                     onSelect="@command('selectDgraph', dgraph=dgraph)"
+                     sclass="@load(dgraphStatusVM.selectedDgraph eq dgraph ? 'selected-dgraph-header' : '')"/>
+              </template>
+            </tabs>
+    
+            <tabpanels children="@load(dgraphStatusVM.dgraphs)">
+              <template name="children" var="dgraph">
+                <tabpanel>
+                  <toolbar>
+                    <toolbarbutton label="Reference App" image="images/application-search-result.png"
+                            onClick="@command(value='viewReferenceApp', dgraph=dgraph)"
+                            tooltip="referenceAppToolTip"/>
+                    <toolbarbutton label="Dgraph Stats" image="images/system-monitor.png"
+                            onClick="@command(value='viewDgraphStats', dgraph=dgraph)"
+                            tooltip="dgraphStatusTooltip"/>
+                    <toolbarbutton label="Restart Dgraph" image="images/lightning.png"
+                            onClick="@command(value='doRestartDgraph', dgraph=dgraph)"
+                            tooltip="restartDgraphTooltip"/>
+                  </toolbar>
+                  <grid model="@load(dgraph.subsystems)">
+                    <columns>
+                      <column label="Subsystem" width="80px"/>
+                      <column label="Cell Metadata" align="center"/>
+                      <column label="Key Prop" align="center"/>
+                      <column label="Active Generation" align="center"/>
+                    </columns>
+                    <rows>
+                      <template name="model" var="subsystem">
+                        <row>
+                          <cell><label value="@load(subsystem.name)"/></cell>
+                          <cell><label value="@load(subsystem.metadataGeneration)"/></cell>
+                          <cell><label value="@load(subsystem.keyPropertyGeneration)"/></cell>
+                          <cell><label value="@load(subsystem.activeEcomGeneration)"/></cell>
+                        </row>
+                      </template>
+                    </rows>
+                  </grid>
+                </tabpanel>
+              </template>
+            </tabpanels>
+            
+          </tabbox>
+
+          <popup id="referenceAppToolTip" width="180px">
+            <style> 
+             #${referenceAppToolTip.uuid} * {background-color:lightyellow} 
+            </style>
+            <label sclass="referenceAppToolTip" value="Click to open the reference application for this Dgraph in new tab."/>
+          </popup>
+          <popup id="dgraphStatusTooltip" width="180px">
+            <style> 
+             #${dgraphStatusTooltip.uuid} * {background-color:lightyellow} 
+            </style>
+            <label sclass="dgraphStatusTooltip" value="Click to see runtime statistics for this Dgraph."/>
+          </popup>
+          <popup id="restartDgraphTooltip" width="180px">
+            <style> 
+             #${restartDgraphTooltip.uuid} * {background-color:lightyellow} 
+            </style>
+            <label sclass="restartDgraphTooltip" value="Click to restart this Dgraph."/>
+          </popup>
+             
+        </groupbox>
+  
+      </north>
+      
+      <center border="0" autoscroll="true">
+        <div>
+          <groupbox mold="3d" width="100%" height="100%">
+            <caption label="Cell Activity"/>
+          </groupbox>
+        </div>
+      </center>
+      
+    </borderlayout>
+  </center>  
+
+</borderlayout>
+
+</zk>

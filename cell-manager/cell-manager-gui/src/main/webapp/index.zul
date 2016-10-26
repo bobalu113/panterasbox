@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="cellManagerPage" title="Endeca Cell Manager"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:zk="http://www.zkoss.org/2005/zk"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+
+<zscript>
+  EventQueue que = EventQueues.lookup("loginQueue", EventQueues.SESSION, true);
+  que.subscribe(new EventListener() {
+    public void onEvent(Event evt) {
+      if (evt.getName().equals("success")) {
+        loginWindow.detach();
+        Execution current = Executions.getCurrent();
+        current.sendRedirect(current.getScheme() + "://" + current.getServerName() + ":" + current.getServerPort());
+      } else {
+        Label loginError = loginWindow.query("#loginError");
+        loginError.setVisible(true);
+      }
+    }
+  });
+</zscript>
+
+<vlayout width="100%" height="100%">
+  <hlayout width="100%" spacing="0">
+    <menubar width="100%" hflex="1" apply="org.zkoss.bind.BindComposer" 
+             viewModel="@id('menuVM') 
+                        @init('com.panterasbox.ecommerce.search.cellmanager.gui.global.MenuViewModel')">
+      <menu label="View">
+        <menupopup>
+          <menuitem image="images/traffic-light-icon.png" label="Dashboard" onClick="@global-command('viewDashboard')"/>
+        </menupopup>
+      </menu>
+      <menu label="Window">
+        <menupopup>
+          <menuitem label="Close All"/>
+        </menupopup>
+      </menu>
+      <menu label="Help">
+        <menupopup>
+          <menuitem label="Version Summary" onClick="@command('helpSummary')"/>
+        </menupopup>
+      </menu>
+    </menubar>
+    
+    <div apply="org.zkoss.bind.BindComposer" 
+         viewModel="@id('authStatusVM') 
+                    @init('com.panterasbox.ecommerce.search.cellmanager.gui.global.AuthStatusViewModel')">
+      <div id="signInPrompt" sclass="z-menubar-hor" style="white-space: nowrap; line-height: 20px" visible="@load(not authStatusVM.signedIn)">
+        <label style="text-align: right">You are not signed in.</label>
+        <label style="text-align: right">[</label>
+        <a onClick="@command('signIn')">Sign In</a>
+        <label style="text-align: right">]</label>
+      </div>
+      <div id="signOutPrompt" sclass="z-menubar-hor" style="white-space: nowrap; line-height: 20px" visible="@load(authStatusVM.signedIn)">
+        <label style="text-align: right">You are signed in as </label>
+        <label style="text-align: right; font-weight: bold" value="@load(authStatusVM.username)"></label><!-- 
+     --><label style="text-align: left">. [</label> 
+        <a onClick="@command('signOut')">Sign Out</a> 
+        <label style="text-align: right">]</label>
+      </div>
+    </div>
+  </hlayout>
+
+  <tabbox height="100%" vflex="1" apply="org.zkoss.bind.BindComposer"
+          viewModel="@id('workspaceVM')
+                    @init('com.panterasbox.ecommerce.search.cellmanager.gui.global.WorkspaceViewModel')">
+    <tabs children="@bind(workspaceVM.tabs)">
+      <template name="children" var="tab">
+        <tab label="@load(tab.name)" image="@load(tab.image)" selected="@bind(tab eq workspaceVM.selectedTab)" closable="true"/>
+      </template>
+    </tabs>
+    <tabpanels children="@bind(workspaceVM.tabs)">
+      <template name="children" var="tab">
+        <tabpanel><include src="@load(tab.content)"/></tabpanel>
+      </template>
+    </tabpanels>
+  </tabbox>
+
+</vlayout>
+</zk> 

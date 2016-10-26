@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:jee="http://www.springframework.org/schema/jee"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/jee 
+    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+  <context:annotation-config />
+
+  <context:component-scan base-package="com.panterasbox.ecommerce.search.cellmanager.gui" />
+  
+  <jee:jndi-lookup id="cellManagerPropertiesLocation" jndi-name="java:comp/env/CellManagerPropertiesLocation" />
+
+  <bean id="cellManagerProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="location" ref="cellManagerPropertiesLocation"/>    
+  </bean>  
+
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations" ref="cellManagerPropertiesLocation" />
+  </bean>
+  
+  <bean id="sessionDataInitializer" class="com.panterasbox.ecommerce.search.cellmanager.gui.session.SessionDataInitializer">
+    <property name="dataSource" ref="sessionDataSource"/>
+  </bean>
+
+  <bean id="cellManagerVersion" class="java.lang.String">
+      <constructor-arg value="${project.version}-${buildNumber}"/>
+  </bean>
+  <bean id="zkVersion" class="java.lang.String">
+      <constructor-arg value="${zk.version}"/>
+  </bean>
+  <bean id="zkSpringVersion" class="java.lang.String">
+      <constructor-arg value="${zkSpring.version}"/>
+  </bean>
+
+  <import resource="classpath:/com/wsgc/ecommerce/config/foundation/foundation-config.xml"/>
+  <import resource="classpath:/com.panterasbox.ecommerce.search.cellmanager/gui/config/web-config.xml" />
+  <import resource="classpath:/com.panterasbox.ecommerce.search.cellmanager/gui/config/security-config.xml" />
+  <!-- 
+  <import resource="classpath:/com.panterasbox.ecommerce.search.cellmanager/gui/config/scheduling-config.xml" />
+  -->
+
+  <!-- overrides w/ H2 database hacks, remove when moving to Oracle -->
+  <bean id="sessionDataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource"
+    destroy-method="destroy">
+    <property name="driverClassName" value="org.h2.Driver" />
+    <property name="url" value="jdbc:h2:mem:test" />
+    <property name="username" value="test" />
+    <property name="password" value="test" />
+    <property name="autoCommit" value="false" />
+    <property name="suppressClose" value="true" />
+  </bean>
+  <bean id="sessionDAO" class="com.panterasbox.ecommerce.search.cellmanager.gui.session.JdbcSessionDAO"
+    init-method="init">
+    <property name="dataSource">
+      <ref bean="sessionDataSource" />
+    </property>
+    <property name="settingsService">
+      <ref bean="settingsService" />
+    </property>
+    <property name="appSpecification">
+      <ref bean="appSpecification" />
+    </property>
+  </bean>
+  
+</beans>
