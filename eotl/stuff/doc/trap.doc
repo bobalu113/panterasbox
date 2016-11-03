@@ -1,0 +1,50 @@
+
+==[ TrapStuff Documentation ]============================================
+
+This is the document for TrapStuff, one of the child modules in the
+StuffCode package.  TrapStuff ignores some of the conventional Stuff
+features, such as blessed/cursed status or randomized short descriptions.
+TrapStuff is functionally identical to our standard TrapCode, and in fact
+inherits TrapCode.  The main difference is that TrapStuff will be 
+randomly distributed across the MUD by the StuffServer.  If no one has
+walked by a trap for more than 2 hours, the trap will be pulled and
+redistributed elsewhere.
+
+Like TrapCode, TrapStuff can be dismantled (if it is not hidden).  Upon
+dismantling, the trap is pulled by the StuffServer.  This allows the trap
+to function with whatever behavior is needed prior to actual destruction
+(similar to other Stuff items).
+
+The rest of this document is a description of the functions that make up 
+the TrapStuff API.
+
+
+====[ TrapStuff Functions ]===============================================
+
+set( "trap_name", string );
+   This is the generic appearance of the trap, such as "a dart trap" or 
+   "an arrow trap".  This must be the first variable set for TrapStuff
+   (and TrapCode) to work.
+
+set( "spawn_limit", int );
+   This is the maximum number of clones the StuffServer will distribute.
+   Default is 0, which will prevent spawning.
+
+set( "prevent_spawn", string * );
+   This variable is set to an array of properties.  TrapStuff will not be
+   distributed to any environment holding those properties.  TrapStuff 
+   will automatically add ShopP, LivingP and ContainerP to any value you 
+   set above. [Example: InsideP]
+
+int do_dismantle( string arg );
+   This function works slightly differently than regular TrapCode, in that
+   the default behavior of TrapStuff will allow a player to successfully 
+   dismantle any revealed trap.  The player will still suffer the trap 
+   effect() if the trap is set and ready.
+
+See the documentation for TrapCode for an explanation of all other 
+standard trap functions.
+
+
+==[ EOF ]==================================================================
+

@@ -1,0 +1,65 @@
+
+==[ WandStuff Documentation]================================================
+
+This is the document for WandStuff, one of the child modules in the
+StuffCode package.  WandStuff adds functionality to the core StuffCode
+module for the zapping wands.  It inherits StuffCode, so if you haven't yet
+read the primary StuffCode document, you should do that first.  All the 
+functions referred to in that document are available in WandStuff.
+
+In addition to the StuffCode core, WandStuff provides a "zap" command
+for users and set of functions associated with that action.  The syntax for
+the "zap" command is either "zap wand at target" or "zap target with wand".
+The messages printed to the room and the user are also provided for in 
+WandStuff, but you may wish to add additional messages of your own.  The 
+rest of this document is a description of the functions that make up the 
+WandStuff API.
+
+
+====[ WandStuff Functions ]================================================
+
+set( "zap_delay", int );
+   This is the combat delay applied to the player when attempting to zap a
+   wand.  Default is 1.
+
+set( "zap_timeout", int );
+   This is the amount of time that must pass before an wand can be
+   zapped again.  Default value is 180.
+
+set( "max_charges", int );
+   This is the maximum amount of charges a wand can hold.  Default value is
+   -1.  Zapping a wand requires at least 1 remaining charge.  
+
+set( "charges", int );
+   A wand spawns with a random amount of charges, up to 'max_charges'.
+   When depleted, the wand can be recharged with a scroll of charging. 
+
+void zap( object who );
+void cursed_zap( object who );
+void blessed_zap( object who );
+   These functions will be called when a player successfully zaps a target. 
+   The code in these functions will consume the bulk of your coding effort,
+   since they handle the effects of zapping the wand, from beginning to end.  
+   Only one of the functions will be called, depending on whether the item 
+   is cursed, uncursed, or blessed.  Default behavior for a cursed wand is
+   that it explodes when applying the zap effect.
+
+int try_zap( object who );
+   If this function returns true, zapping the wand will be prevented. If
+   you prevent zapping in this way, you will probably also want to issue
+   some message to the user.  Default behavior already performs standard
+   combat checks when zapping a living target other than yourself.
+
+void zap_signal( object who );
+   This is called after the wand has been zapped and the effects have 
+   taken place.  Here you might want to do things common to item usage, 
+   regardless of whether it has been cursed or blessed (ie. identify the
+   wand).
+
+int recharge( int x );
+   Adds x charges, or all the way to max_charges if !x.  This function 
+   also increments the 'number of times recharged' counter.
+
+==[ EOF ]==================================================================
+Dorf 11-2010
+

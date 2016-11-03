@@ -1,0 +1,71 @@
+
+==[ ArtifactStuff Documentation]============================================
+
+This is the document for ArtifactStuff, one of the child modules in the
+StuffCode package.  ArtifactStuff is a little different from the other core
+StuffCode modules, in that most artifacts are also going to inherit another
+core code, such as ArmorCode or WeaponCode.  Artifacts come in a variety of
+sizes and shapes, and can be worn, wielded, held, or invoked.
+
+ArtifactStuff consists of 2 components:  an inheritable file and an 
+#include file.  This is necessary (in most cases) to avoid conflicts with 
+the other base modules (FooCode).  To create an artifact, you will inherit 
+FooCode and ArtifactStuff, and then #include "artifact.h".
+
+The ArtifactStuff inheritable file is a modified StuffCode, and contains 
+most of the normal StuffCode functionality (blessed status, identification,
+etc ).  The <artifact.h> file overrides common functions such as  short(), 
+long(), set(), query(), and id().  In most cases, this code then passes 
+calls to the core FooCode using the :: operator. 
+
+The rest of this document is a description of the functions that make up 
+the ArtifactStuff API.
+
+
+====[ ArtifactStuff Functions ]============================================
+
+set( "item_name", string );
+   This is the generic appearance of the unidentified artifact, such as
+   "longsword" or "crystal ball".
+
+set( "invoke_timeout", int );
+   This is the amount of time that must pass before an artifact can be
+   invoked again.  Default value is 180 (same as WandCode).
+
+set( "max_charges", int );
+   This is the maximum amount of optional 'charges' an artifact can hold.  
+   Default value is -1.  Invoking an artifact will require 1 charge if 
+   'max_charges' is greater than 0.  Setting 'max_charges' to 0 will 
+   prevent the artifact from being invoked at all.
+
+set( "charges", int );
+   This is the amount of 'charges' an artifact holds upon cloning.  Default
+   value is -1.  The artifact cannot be invoked if charges = 0.  You must
+   set 'max_charges' before setting 'charges' to a positive number. 
+
+void invoke( object who );
+void cursed_invoke( object who );
+void blessed_invoke( object who );
+   These functions will be called when a player successfully invokes an 
+   artifact.  Invoking an artifact does not target anything.  The code in 
+   these functions will consume the bulk of your coding effort, since they
+   handle the effects of invoking the artifact, from beginning to end.  
+   Only one of the functions will be called, depending on whether the item 
+   is cursed, uncursed, or blessed.  Default behavior for a cursed artifact
+   is that it explodes when applying the invocation effect.
+
+int try_invoke( object who );
+   If this function returns true, invoking the artifact will be prevented.
+   If you prevent invocation, you will probably also want to issue some
+   message to the user.
+
+void invoke_signal( object who );
+   This is called after the artifact has just been invoked and the effects
+   have taken place.  Here you might want to do things common to item
+   usage, regardless of whether it has been cursed or blessed (ie.
+   identify the artifact).
+
+
+
+==[ EOF ]==================================================================
+

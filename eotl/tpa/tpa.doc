@@ -1,0 +1,195 @@
+==[ EotL TPA Documentation]===============================================
+
+Adding stations to the TPA network is a relatively easy task, but it
+requires a little understanding of the TPA framework.  Each station serves 
+as an arrival point, or a departure point, or both.  This means that an 
+area can put its departure station in a different room as its arrival 
+station, or have several departure stations which are thematically 
+associated with one arrival (such as the EC Terminal).  Both the API and 
+the UI for departure and arrival can be desribed independently, as there 
+really isn't any overlap between them outside of a few descriptions.
+
+Arrivals:
+Arrival stations serve two purposes.  First, they mark which room the 
+player will be teleported to when he is routed to that desination.  Second, 
+they allow the user to scan their card through the console to that station 
+to their "allowed list" of TPA destinations.  For this purpose, every 
+arrival station must have a unique identifier.
+
+Departures:
+Departure stations are slightly more complex.  First, they must set the 
+avaiable destinations for that departure point.  This is done by using the 
+_exact_ same identifier that was mentioned above for each arrival station.  
+Each destination must also have a price associated with it, though the 
+price can be 0 credits.  Credits are automatically deducted from the card 
+when the departure button is pressed.  Finally, if a station has more than 
+one destination, you must describe one of the following two things:
+  - For manual switch stations, the order in which the stations are 
+    cycled through on the dial.
+  - For timed switch stations, all the times (mud times) that the 
+    console must switch to a new station.
+Each departure point also has a unique identifier, which may or may not be 
+the same as the arrival identifier on stations which serve both arrivals 
+and departures.  This string controls how the departure point will appear 
+on the schedule.
+
+Both the arrival and departure identifiers also serve as flags to let 
+other objects know what kind of console you've written.  When you add a
+new station to the TPA network, that station should be added to an array 
+of autoloaded stations in the TPA server.  Another object, such as a room,
+could theoretically be responsible for loading the console, but then the
+station would be offline until the room was loaded by a wandering mortal.
+
+In order to use a departure console, the user must have a TPA card in 
+their inventory, with sufficient credits to make the trip.  The card must 
+also have the target station on its list of allowed destinations.  There 
+is also a central server to track which stations are on the TPA network at 
+any given time.
+
+The rest of this doc will describe the API for the consoles, the card and 
+the server.
+
+====[ TPA Console API ]===================================================
+
+The following are the functions that make up the TPA console module.  All
+consoles should inherit TPAConsole, which provides the basic user 
+interface shared across all the units.  TPAConsole also inherits 
+ObjectCode, so those functions and variables are available to you as well.
+
+==[Arrival Functions]==
+
+set_arrival( string id );
+   Flag this station as an arrival station with the identifier id.  This 
+   identifier must be unique.  If you try setting it to an identifier that
+   is already in use, the assignment will fail.
+
+set_schedule( string abbrev );
+   This sets the two-letter abbreviation that will be used on the TPA 
+   schedule.  If you do not set this string, the arrival station will not 
+   appear on the schedule at all.
+  
+set_reserve( int price );
+   This is the minimum price that will be charged for trips to this 
+   station.  If a departure console tries to set a price lower than this, 
+   then the reserve price set here will be used instead.
+
+==[Departure Functions]==
+
+set_departure( string id );
+   Flag this station as a departure station with the identifier id.  This 
+   identifier should be unique, but there is no validation to ensure that 
+   it is.
+
+set_prices( mapping pricemap );
+set_price( string id, int price );
+   This sets the price to travel to each of the arrival points.  The 
+   pricemap is of the form ([ id : price ]), where id is the exact same 
+   identifier that the arrival station uses in its set_arrival() call.
+   The maximum price allowed is 99 credits.  Prices higher than 99 will
+   be truncated to 99.
+
+set_toggle( string *stationlist );
+   For manually switched stations, this sets the order in which dial 
+   cycles through the destinations.  If you omit a destination from this
+   list, it will not be available to the user (even if you included it
+   in the pricemap).  The elements are the arrival station identifiers.
+
+set_timetable( mapping timemap );
+add_timetable( string id, int *times );
+clear_timetable( string id );
+   For stations with a timed switch, this sets at which times the console
+   will change the destination.  The id elements are the arrival station
+   identifiers, and the timemap is of the form ([ id : *times ]).  The
+   *times array is a list of the mud times of the form hhmm, in 24-hour
+   format.  For instance, 9:44pm would be the number 2144.  Whenever the
+   mudclock strikes one of these times, the destination of this 
+   departure station will switch to the associated arrival id.  An 
+   arrival id of 0 may be used to signal the console to go temporarily
+   out of service.
+   
+   Example:
+     ([ "Eternal City" : ({ 0, 300, 600, 900, 1200, 1500 }),
+        "Newbieland"   : ({ 200, 500, 800, 1400  }),
+        0              : ({ 1130, 2330 }) ])
+        
+   This equates to the following timetable:
+     midnight-200am   : Eternal City
+     2:00am-3:00am    : Newbieland
+     3:00am-5:00am    : Eternal City
+     5:00am-6:00am    : Newbieland
+     6:00am-8:00am    : Eternal City
+     8:00am-9:00am    : Newbieland
+     9:00am-11:30am   : Eternal City
+     11:30am-noon     : Out of Service
+     noon-2:00pm      : Eternal City
+     2:00pm-3:00pm    : Newbieland
+     3:00am-11:30pm   : Eternal City
+     11:30am-midnight : Out of Service
+     
+   Since building the *times array manually can be somewhat tedious, a
+   helper function called explode_minutes() has been provided (see below).
+
+==[Other Functions]==
+
+set_offline( int flag );
+   This is a simple flag to take the teleporter offline.  Teleporters that
+   are offline cannot be used for departures or arrivals, and other 
+   stations that try to teleport to them will issue a out-of-service 
+   message to the user.  This is the only function common to both 
+   arrival and departure stations.
+  
+room_setup( string|object room );
+   This is just a helper function that you can call in create() to set the 
+   console up in a room.  Right now all it really does is load the room
+   and move the console.
+
+explode_minutes( int inc, int start, int end );
+   This is another helper function to make building the timetables easier.
+   It creates lists of times in 'inc' increments, starting at 'start'
+   and going no higher than 'end'.  For instance:
+   
+     explode_minutes( 45, 0, 559 ) + explode_minutes( 120, 600, 1200 )
+     
+     returns:
+     
+     ({ 0, 45, 130, 215, 3, 345, 430, 515, 600, 800, 1000, 1200 })
+
+
+====[ TPA Card API ]======================================================
+
+The following are public functions in the TPA card.  All the set functions
+have query equivilents, but have been omitted for brevity.
+
+set_credits( int n )
+add_credits( int n )
+query_credits()
+   Set/query how many credits are on the card.
+   
+   
+set_stations( string *s )
+add_station( string s )
+remove_station( string s );
+query_stations()
+query_station( string s );
+   Set/query which stations are on the access list for the card.
+   
+multi_check()
+   This function performs a check for multiple TPA cards in the same
+   inventory.  It is automatically called whenever the card is moved.
+
+====[ TPA Server API ]====================================================
+
+The server is just a simple database of the stations that are currently
+available on the TPA network.  It is how departure stations find arrival
+stations when a user pushes the button on the console.  The other main
+function of the server is to preload all the stations when the MUD starts.
+
+query_departures()
+   Return an array of all the departure consoles registered with the 
+   server.
+   
+query_arrivals()
+   Return an array of all the arrival consoles registered with the 
+   server.
+
+==[ EOF ]==================================================================

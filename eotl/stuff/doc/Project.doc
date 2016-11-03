@@ -1,0 +1,98 @@
+If you can't already tell, one of the goals of the project was to make it as
+easy for wizards to get these items online as possible.  The directory
+containing the basecode, as well as the loading directories for all the
+individual stuff items is /z/n/stuff.  I have given wizards complete read
+and write access to that directory.  If you guys abuse that access, it'll
+make me very, very sad.  The freedom is for wizards' sake, not mine.  I'm
+not going to try to enforce any rules because its not realistic, but here's
+some general guidelines you might want to follow to prevent getting your ass
+kicked:
+
+  * Put your name on all the code you write.
+  * Don't touch anyone's code except yours.  If there's something you
+    think shound be changed, talk to the coder.
+  * Don't touch ANYTHING in /z/n/stuff/base/.  Yes, you have access to
+    it.  If you have an idea you'd like to install, talk to someone
+    important first.
+  * Backup all your code.  This is a public dir, anything can happen.
+  * Don't put anything in /z/n/stuff that isn't ready to go online.
+  * Before you install a new item, have some people check it out first.
+    I'm not going to set up some StuffReviewJunta or anything, but just
+    use some common sense.  It's pretty easy to spot a bullshit item.
+  * If you have an idea that you want to code, find out if someone else
+    is already coding it.
+  * Put all your objects in the right place.  Here's a breakdown of the
+    /z/n/stuff/ directory tree to help you:
+    base/     - All the core inheritables, as well as the StuffServer.
+    potions/  
+    scrolls/
+    amulets/
+    rings/    - The objects in these dirs will automatically be registered
+                with the StuffServer when the mud loads.  These dirs 
+                should contain the stuff objects themselves and nothing 
+                else.  There's an FCS dir here if you want to use it, but 
+                there shouldn't be any logs, backups, or support objects 
+                here.  If your object isn't ready to go online, don't put 
+                it here.
+    support/  - Any objects you need to support the stuff you code (ie. 
+                bonus objects, shadows) go here.
+    inc/      - Include directory containing the global.h header file which 
+                defines all the StuffCode macros.
+    docs/     - Text files and documentation.
+    logs/     - Record log files here.
+    tmp/      - Just another dir you have write access to for whatever 
+                purpose you need it to serve (ie. offlining or testing 
+                something).
+
+
+Since all wizards have access, all wizards can contribute.  The purpose of
+the Stuff Project is to get a lot of different stuff out in the hands of
+players, without putting the pressure of coding an entire area in the hands
+of the wizards.  If you're coding an area, that's good.  Finish it.  Few of
+us have the time to devote to finishing an area, though.  That's where Stuff
+comes in.
+
+There should be something for just about anyone to do.  If you don't know
+how to code, try writing down some ideas.  You can code simple stuff in less
+than an hour, or something really elaborate that takes a week to finish.
+It's pretty much up to you.  Even if you're completely useless and have no
+ideas and can't code, clone up some stuff and bugtest it.  Very simple
+things should take no time at all to code.  I coded a healing potion and
+light scroll in less than 15 minutes.  If you have more time, this project
+still gives you the opportunity to get really creative.  You may have an
+idea for a skill or object you always wanted to make, but never had a place
+to put it.  This is your chance.  Keep in mind that the project isn't
+targeted at people who are doing major code production.  It's targeted at
+the hundred odd guests we have here, who have wizard bodies but aren't
+really doing anything.  If you're not doing anything because you don't have
+an interest, that's your problem.  But if you're not doing anything because
+of time or ability, I hope you'll consider maybe contributing to this stuff.
+There are a lot of possibilities for anyone that has the interest.
+
+That's what the Stuff Project does for wizards, but what does it do for
+mortals?  Well the purpose here is threefold.  First, it will give mortals
+some interesting, and potentially powerful objects they can use right away.
+It's interesting because you never know what you're going to find.  "A
+scroll labeled ESAHC" could be just about anything.  It could be cursed or
+it could be blessed, there's always an element of hope, and there's always
+an element of chance.  Second, it will draw them out of the high-traffic
+areas and into some of the underused areas.  This placement of this stuff is
+completely random.  It can go anywhere.  If a mortal is aware that a really
+good item exists out there, he'll have to search all over the mud to find
+it.  Third, it won't affect game balance [much].  Since everyone has an
+equal opportunity to find this stuff, everyone has an equal opportunity to
+score.  Mortals like to complain, a lot.  Whenever someone codes a neat
+skill, there's always someone in some other guild to bitch about it.  This
+project will add to the game, in a way that's hopefully very hard to
+complain about.
+
+Remember, the point of this project is to give just about anyone something
+to do.  If you don't know how to code, try writing down some ideas.  You can
+code simple stuff in less than an hour, or something you.  Even if you're
+completely useless and have no ideas and can't code, clone up some stuff and
+bugtest it.
+
+There are lots of different ways this project could be really cool.  The
+only way it can fail is if no one takes advantage of it.
+
+-Devo

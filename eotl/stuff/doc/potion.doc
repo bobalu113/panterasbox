@@ -1,0 +1,69 @@
+==[ PotionStuff Documentation]=============================================
+
+This is the document for PotionStuff, one of the child modules in the
+StuffCode package.  PotionStuff adds functionality to the core StuffCode
+module for the quaffing and throwing of potions.  It inherits StuffCode, so
+if you haven't yet read the primary StuffCode document, you should do that
+first.  All the functions referred to in that document are available in
+PotionStuff.
+
+In addition to the StuffCode core, PotionStuff provides the "quaff" and
+"throw" commands for users and set of functions associated with those
+actions.  The syntax for the quaff command is simply "quaff potion" and the
+syntax for the throw command is "throw potion at <ob>".  Throwing a potion
+at a player or monster will initiate combat with them, and all the regular 
+combat checks are performed before throwing is allowed.  The messages 
+printed to the room and the user are also provided for in PotionStuff, but 
+you may wish to add additional messages of your own.  The rest of this 
+document is a description of the functions that make up the PotionStuff 
+API.
+
+
+====[ PotionStuff Functions ]==============================================
+
+set( "quaff_delay", int );
+   This combat delay will be issued to a player when he quaffs the potion.
+   Defaults to 1.
+
+set( "throw_delay", int );
+   This combat delay will be issued to a player when he throws the potion.
+   Defaults to 1.
+   
+void quaff( object who, int thrown );
+void cursed_quaff( object who, int thrown );
+void blessed_quaff( object who, int thrown );
+   These functions will be called in one of two circumstances.  Either a
+   player has quaffed the potion, in which case 'who' is the quaffer, or
+   a player has thrown the potion at another player, in which case the
+   'who' is the target.  The code in these functions will consume the bulk 
+   of your coding effort, since they handle the effects of using the stuff,
+   from beginning to end.  Only one of the functions will be called, 
+   depending on whether the item is cursed, uncursed, or blessed.  After 
+   using the potion, it will be moved to a containment location, until it 
+   can be safely dested (no pending call_outs or heart_beat).  If the 
+   potion has been thrown, the 'thrown' argument will be 1, otherwise it 
+   will be 0 for regular quaffing.
+
+int try_quaff( object who );
+   If this function returns true, quaffing the potion will be prevented.
+   If you prevent quaffing, you will probably also want to issue some
+   message to the user.
+
+int try_throw( object thrower, object target );
+   If this function returns true, throwing the potion will be prevented.
+   If you prevent throwing, you will probably also want to issue some
+   message to the user.
+
+void quaff_signal( object who );
+   This is called after the potion has just been quaffed and the effects 
+   have taken place.  Here you might want to do things common to item 
+   usage, regardless of whether it has been cursed or blessed (ie. 
+   identify the potion).
+
+void throw_signal( object thrower, object target );
+   This is called after the potion has just been thrown and the effects 
+   have taken place.  Here you might want to do things common to item 
+   usage, regardless of whether it has been cursed or blessed (ie. 
+   identify the potion).
+
+==[ EOF ]==================================================================

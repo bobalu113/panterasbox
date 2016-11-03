@@ -1,0 +1,276 @@
+==[ StuffCode Documentation]===============================================
+
+This is the primary document for StuffCode, an experimental side-project
+that I've been playing with off and on.  The Stuff Project itself is a
+package of different modules and tools that will all be described in
+different documents.  However, this document is the starting point for all
+the other resources in the Stuff Project, so if you're new to this whole
+"stuff" thing, this is the right doc to be reading.
+
+This document is divided into 3 sections.  The first is a description of
+the overall schematic of what StuffCode is and how it works; the second is
+the technical reference for the functions and variables common to all
+StuffCode modules; and the third is an appendix describing the StuffServer
+API for advanced users or people just curious to understand the nuts and
+bolts of the whole system.
+
+In addition to this document, you will most likely need to read the other
+documents in this directory pertaining to specific StuffCode modules and
+concepts.  These documents are as follows:
+
+  Project.doc - Manifesto of The Stuff Project.
+                Guidelines to follow when implementing the stuff you code.
+  scroll.doc  - ScrollStuff documentation.
+                Used for scrolls which you can read.
+  potion.doc  - PotionStuff documentation.
+                Used for potions which you can quaff and throw.
+  wand.doc    - WandStuff documentation.
+                Used for wands which you can zap.
+  amulet.doc  - AmuletStuff documentation.
+                Used for amulets which you can wear and remove.
+  ring.doc    - RingStuff documentation.
+                Used for rings which you can wear and remove.
+  artifact.doc - ArtifactStuff documentation.
+                Used for Armor/Weapon/Foo items, some of which can be invoked.
+
+Any questions, comments, corrections, omissions, etc. should be sent to me,
+Devo.  Thanks for trying StuffCode!
+
+
+====[ Stuff Explained ]====================================================
+
+StuffCode is a package if inheritables for making different kinds of
+objects.  While each module in the package has functions unique to its
+purpose, there are also unifying features that make all stuff objects able
+to interact with players and each other in a similar manner.
+
+Each item can be cursed, uncursed, or blessed, and the coder should make
+the item behave differently depending on its cursed/blessed status.  Each
+item has a meaningless description until it's been identified.  However,
+all items of the same kind have the same description.  For instance, all
+potions of healing will be "a blue potion".  When a player identifies an
+item, he only identifies it for himself.  The description and the
+cursed/blessed status of an item may be identified independently of each
+other.  For example, if you identified "a blue potion" in your inventory
+the description would change to "a potion of healing [cursed]".  The other
+blue potions in your inventory would also change to "a potion of healing"
+but the cursed/blessed status would be reported for only the 1 specific
+potion that you identified.
+
+The StuffCode objects are divided into several directories according to
+what type of object it is.  When the game starts, a server loads the
+contents of those directories.  Whenever an item is loaded from those dirs,
+it gets registered with the server, and the server begins dispensing clones
+of that item to various places on the mud.  The items will get dispensed to
+room and monsters.  Shops may also register themselves with the server so
+that the server will dispense StuffCode objects to them.  If and when an
+item gets destructed, it will be regenerated somewhere else on the mud.
+
+
+====[ Core StuffCode Functions ]===========================================
+
+The following are the functions that make up the core StuffCode module.
+While the StuffCode module itself is only to be inherited in extreme
+circumstances where one of the other child modules is insufficient, these
+functions are all a part of each one of those modules.  StuffCode also
+inherits ObjectCode, so those functions and variables are available to you
+as well.
+
+set( "short", str );
+  This sets the short description of the stuff when it has been identified.
+  Unidentified stuff will use the short description that has been assigned
+  to it by the StuffServer.
+
+set( "id", str|*str );
+  This sets the aliases of the stuff when it has been identified.  All stuff
+  has a set of aliases that is assigned to it by the StuffServer, but when
+  an object has been identified, the aliases set here will work as well.
+
+set( "id_default", int );
+  If set to true, the stuff will always be identified, for everyone.
+  This only affects the ID_PROGRAM bit, however.  The cursed/blessed
+  status will still need to be identified on an object by object basis
+  (see query_identified()).
+  
+set( "spawn_limit", int );
+  The StuffServer will clone your stuff and respawn it in various places
+  around the mud.  This number is the maximum amount of clones the 
+  StuffServer may make of your stuff.
+  
+set( "spawn_rate", int );
+  The StuffServer attempts to make clones of your object periodically.
+  Normally, the chance that it will spawn a new copy of your object is
+  inversly proportional to the ratio of total clones to max clones.
+  Whatever number you set here will add that percentage to the spawn
+  chance.  If the math makes more sense to you, here it is:
+    chance = ( num_clones * 100 ) / spawn_limit;     // fail chance
+    chance = 100-chance;                             // success chance
+    chance += spawn_rate;                            // modify it
+
+set( "prevent_spawn", string * );
+  This variable is set to an array of properties (as defined in 
+  global_property.h).  The StuffCode item will not be dispensed to an object
+  that defines any of the properties in that list.  For instance, setting
+  prevent_spawn to ({ ShopP }) will prevent the StuffServer from dispensing
+  your item to shops.
+
+int bless();
+   Makes the stuff blessed.  Returns true for success and false for failure.
+
+int curse();
+   Makes the stuff cursed.  Returns true for success and false for failure.
+
+int uncurse();
+   Removes the curse on the stuff, but does not bless it.  Returns true for 
+   success and false for failure.
+   
+int unbless();
+   Returns a blessed item back to "normal."  Returns true for success and 
+   false for failure.
+
+int identify( object who, int id_type );
+   Identifies the stuff for the player designated by the object 'who'.  The
+   stuff and all other copies of the stuff will remain identified for that
+   player until he or the StuffServer is dested.  The second argument is
+   optional, and will specify which identify bit gets set: ID_PROGRAM,
+   ID_OBJECT, or both.  If not given, both ID_PROGRAM and ID_OBJECT will
+   be identified for this item.  (see below)
+
+int query_identified( object who );
+   Returns an integer telling you how an object has been identified.  If 0,
+   the object has not been identified at all.  If the ID_PROGRAM bit is set
+   (val&ID_PROGRAM), the program has been identified, which reveals the
+   "real" short description to the player.  If the ID_OBJECT bit is set, 
+   then this particular object has been identified and a player will be
+   shown whether or not it is cursed, uncursed, or blessed.  If both bits
+   are set, the object is fully identified.  Examples:
+     val=query_identified(THISP);
+     if( !val )             
+       short() == "a blue potion";
+     if( (val&ID_PROGRAM) && !(val&ID_OBJECT) )
+       short() == "a potion of healing";
+     if( !(val&ID_PROGRAM) && (val&ID_OBJECT) )
+       short() == "a blue potion [cursed];
+     if( (val&ID_PROGRAM) && (val&ID_OBJECT) )
+       short() == "a potion of healing [cursed]";
+   
+   You may overload the return value of query_identified() by shadowing
+   the stuff_id_check() function in the player.  This function is defined
+   as follows:
+
+     void stuff_id_check( int &id, object item );
+
+   The first argument is the value that would normally be returned by 
+   item->query_identified(player).  This argument is passed by reference, 
+   so if your stuff_id_check() function changes the value, then that new 
+   value will be returned by query_identified() in the stuff item.  An 
+   object reference to the stuff item itself is also passed as the second 
+   argument.
+
+int query_cursed();
+int query_uncursed();
+int query_blessed();
+  Accessor functions to determine the item's blessed/cursed status.  Only
+  one of these functions should return true at any given time.  They are
+  shadowable, but make sure you shadow all three to prevent conflict from
+  arising.
+
+void spawn_signal();
+   After the StuffServer clones up a new copy of any stuff object and
+   places it in some random location on the mud (or possibly a shop), 
+   the server will call this function in the item it just distributed.
+
+ForceID(code)
+ForceUnID(code)
+   These aren't actually functions, but rather macros defined in stuff.h.  
+   Their syntax is simliar to the catch function, in that you pass code to 
+   the macro which it will execute.  Under ForceID() all stuff objects will 
+   be identified during the execution of the code, and under ForceUnID all 
+   stuff objects will be unidentified.  This macro uses set_this_player()
+   to work correctly, so any calls to this_player() in the code you pass
+   won't work correctly.  Instead, use a special variable called 
+   'old_player'.  Here's an example:
+
+     ForceID(
+       if( !present( "healing potion", ENV(old_player) ) )
+       {
+         tell_object( old_player, "You don't have a healing potion.\n" );
+         return 1;
+       }
+     )
+
+   This example will exit the function if THISP doesn't have a healing
+   potion on them, even if they haven't identified healing potions yet.
+   Notice that you can have more than one statement in the code segment,
+   and you must follow every statement (even if there's only one) with a
+   semi-colon.  Also, you must not follow the macro call with a semi-colon.
+
+
+====[ The StuffServer API ]================================================
+
+Upon creation, the StuffServer will search a list of designated directories
+for stuff.  It will attempt to load all .c files, and any loaded objects
+using StuffCode will be entered into its stuff database.  The StuffServer
+keeps track of when stuff has been created and used up, and is responsible
+for respawning the items in its stuff database throughout the mud.  The
+stuff loaded can potentially be found in shops, monsters, and rooms.  Any 
+objects setting the property, NoStuffP as defined in "stuff.h" will not
+have any stuff served to them.  The following functions provide different 
+ways of communicating with the StuffServer.  Most of them are called 
+implicitly by StuffCode, and you will never need to use them.  They are 
+only documented here for reference under more extreme circumstances.
+
+int register_shop( object shop, string *props );
+   This will register a shop object in the StuffServer as a shop that
+   sells a certain kind of stuff.  The first argument is the shop object
+   itself, the second argument is an optional array containing strings as 
+   defined in <global_property.h> that represent the types of stuff that 
+   should be sold (ie. ScrollP, PotionP).  If *props is not given, all 
+   types of stuff will be dispensed.
+   
+int pull_item( object item );
+   Pulls some stuff from the game so that it may not be used anymore.
+   This doesn't mean that the object will not be respawned; it is just
+   a cleaner way of removing an item than destruct() provides.  This is
+   normally called after the stuff has been used by a player, and 
+   returns true if the item was successfully pulled from the game.  All
+   items will attempt to pull themselves from the game if they haven't
+   been used after a while (roughly 6 hours), just in case the 
+   StuffServer distributes an item to an offline area or an unattackable
+   monster.
+
+int push_item( object item );
+   Registers some newly created stuff in the StuffServer database.  This
+   includes things like keeping track of an item's properties and how
+   many clones are being used in the game.  This returns true if the 
+   item was successfully accounted, or 0 for failure.  StuffCode registers
+   all items in create(), and destructs any objects that fail the 
+   push_item() call.  Only items from /z/n/stuff may be pushed onto the
+   server, but any item may be safely cloned and used.  This check is
+   in effect so that people may create stuff for testing purposes without
+   worrying about the StuffServer distributing them to mortals.
+
+string *query_stuff_list( string prop );
+   This function will return a list of program_name's for all the stuff
+   that has been pushed into the server's database.  If the optional
+   argument is given, the list will be filtered through a given property,
+   in order to limit output to just potions, or just scrolls, etc.
+
+string request_label( object item );
+   Returns a label for the object that can be used to uniquely recognize
+   it even though it has not been identified.  This is called implicitly 
+   from StuffCode; if you are calling it yourself you might be doing
+   something wrong.
+
+void do_id( object item, object who, int id_type );
+   Identifies the specified item for the player designated by the object 
+   'who.'  Normally, item->identify(who, id_type) should be used instead 
+   of going to the StuffServer directly, but this may need to be used in 
+   special cases.
+
+int check_id( object item, object who );
+   Returns the identify status of an item for the object 'who.'  Normally, 
+   item->query_identified(who) should be used instead of going to the 
+   StuffServer directly, but this may need to be used in special cases.
+
+==[ EOF ]==================================================================

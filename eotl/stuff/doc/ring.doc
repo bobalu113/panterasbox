@@ -1,0 +1,113 @@
+==[ RingStuff Documentation]===============================================
+
+This is the document for RingStuff, one of the child modules in the 
+StuffCode package.  RingStuff adds functionality to the core StuffCode 
+module for the wearing and removing of rings.  It inherits StuffCode, so 
+if you haven't yet read the primary StuffCode document, you should do that 
+first.  All the functions referred to in that document are available in 
+RingStuff.
+
+In addition to the StuffCode core, RingStuff provides the "wear" and 
+"remove" commands for users and set of functions associated with those 
+actions.  The syntax for the wear and remove commands are "wear ring" and 
+"remove ring" and though they resemble the commands in the player body, 
+they are not.  StuffCode rings are unlike RingCode rings in that they do 
+not inherit ArmorCode or conform to any of the armor standards set up in 
+the player body.  A player may only wear as many StuffCode rings as he has 
+hands at one time, though he may end up more than that if he is 
+concurrently wearing some ArmorCode rings.  Since all items of StuffCode 
+dawn the "Stuff, Inc" logo, it should be easily identifiable to any mortal 
+which rings use which codeset by looking at the long description.
+
+Support for StuffCode rings is actually divided into two sister modules; 
+RingStuff is the inheritable for the ring itself, but in order for the 
+ring to function properly you must also provide an associated shadow.  The 
+shadow object will inherit RingStuffShadow, and then go on to define a set 
+of functions that will overload functions in the player body.  All the 
+shadowing and unshadowing mechanisms are already present in the 
+RingStuffShadow module, so the overloaded functions are the only ones you 
+should be writing.  There are, however, a few utility functions you might 
+make use of which are described below.
+
+Cursed rings may not be removed until they are uncursed.  All the messages 
+printed to the room and the user are also provided for in RingStuff, but 
+you may wish to add additional messages of your own.  The rest of this 
+document is a description of the functions that make up the RingStuff API.
+
+
+====[ RingStuff Functions ]================================================
+
+set( "shadow_file", str );
+   This string is the path to the shadow that will be placed on the player
+   when the ring is worn.  If it does not load or is somehow invalid, the
+   ring will not function properly.
+
+set( "wear_delay", int );
+   This combat delay will be issued to a player when he wears the ring.
+   Defaults to 1.
+
+set( "remove_delay", int );
+   This combat delay will be issued to a player when he removes the ring.
+   Defaults to 1.
+   
+int try_wear( object who );
+   If this function returns true, wearing the ring will be prevented. If
+   you prevent wearing, you will probably also want to issue some message
+   to the user.
+
+void wear_signal( object who );
+   This is called after the ring has been worn and the shadow is in effect.
+   Here you might want to do things common to item usage, regardless of
+   whether it has been cursed or blessed (ie. identify the ring).
+
+int try_remove( object who );
+   If this function returns true, removing the ring will be prevented.  If
+   you prevent removal, you will probably also want to issue some message
+   to the user.  (Note: try_remove() automatically returns 1 for cursed 
+   rings.)
+
+void remove_signal( object who );
+   This is called after the ring has been removed and the shadow has been
+   destructed.  Here you might want to do things common to item usage, 
+   regardless of whether it has been cursed or blessed (ie. identify the 
+   ring).
+
+int query_worn();
+   This function returns true if the ring is currently being worn.
+   
+object ring_stuff_shadow();
+   This function returns an object reference to the shadow that is 
+   currently placed on the wearer of the ring, or 0 if the ring isn't
+   being worn.
+
+
+====[ RingStuffShadow Functions ]==========================================
+
+object ring_stuff();
+   This function returns an object reference to the RingStuff object that
+   is associated with the current RingStuffShadow object.
+
+object ring_stuff_shadow();
+   This function returns the current RingStuffShadow object.
+
+object *all_ring_stuff();
+   This function returns an array of object references for all the 
+   RingStuff objects that are currently being worn.  Calling 
+   sizeof( player->all_ring_stuff() ) is an easy way to find out how many 
+   rings he is currently wearing.
+
+object host();
+   This function returns an object reference to the player wearing the
+   ring.
+
+int ring_cursed();
+   This function is a shortcut for ring_stuff()->query_cursed().
+   
+int ring_uncursed();
+   This function is a shortcut for ring_stuff()->query_uncursed().
+
+int ring_blessed();
+   This function is a shortcut for ring_stuff()->query_blessed().
+
+
+==[ EOF ]==================================================================

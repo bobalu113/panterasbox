@@ -1,0 +1,46 @@
+==[ ScrollStuff Documentation]=============================================
+
+This is the document for ScrollStuff, one of the child modules in the
+StuffCode package.  ScrollStuff adds functionality to the core StuffCode
+module for the reading of scrolls.  It inherits StuffCode, so if you
+haven't yet read the primary StuffCode document, you should do that first.
+All the functions referred to in that document are available in
+ScrollStuff.
+
+In addition to the StuffCode core, ScrollStuff provides a "read" command
+for users and set of functions associated with that action.  The syntax for
+the read command is simply "read scroll".  The messages printed to the room
+and the user are also provided for in ScrollStuff, but you may wish to add
+additional messages of your own.  The rest of this document is a
+description of the functions that make up the ScrollStuff API.
+
+
+====[ ScrollStuff Functions ]==============================================
+
+set( "read_delay", int );
+   This combat delay will be issued to a player when he reads the scroll.
+   Defaults to 1.
+
+void read( object who );
+void cursed_read( object who );
+void blessed_read( object who );
+   These functions are called when 'who' reads the scroll.  The code in
+   these functions will consume the bulk of your coding effort, since they
+   handle the effects of using the stuff, from beginning to end.  Only 
+   one of the functions will be called, depending on whether the item is
+   cursed, uncursed, or blessed.  After using the scroll, it will be
+   moved to a containment location, until it can be safely dested (no
+   pending call_outs or heart_beat).
+   
+int try_read( object who );
+   If this function returns true, reading the scroll will be prevented.
+   If you prevent reading, you will probably also want to issue some
+   message to the user.
+
+void read_signal( object who );
+   This is called after the scroll has been read and the effects have
+   taken place.  Here you might want to do things common to item usage,
+   regardless of whether it has been cursed or blessed (ie. identify
+   the scroll).
+
+==[ EOF ]==================================================================
