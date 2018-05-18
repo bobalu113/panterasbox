@@ -28,7 +28,8 @@
       mmquote[14] = "Dude, can we bring the brewskis?";
       mmquote[15] = "I don't live here. I'm just here for the ladies.";
       mmquote[16] = "Maybe you should put some shorts on or something if you want to keep fighting evil today.";
-      var i = Math.floor(16*Math.random());
+      var pool = [ 6, 7, 8, 9, 10, 11, 13, 15, 16 ];
+      var i = pool[Math.floor(pool.length * Math.random())];
       mmquote = mmquote[i];
     //-->
     </script>
